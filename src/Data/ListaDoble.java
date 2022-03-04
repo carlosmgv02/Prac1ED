@@ -1,12 +1,13 @@
 package Data;
 import java.lang.Iterable;
-public class ListaDoble<T> implements TADCiutada <T>,Iterable<T>,Comparable<Nodo>{
+import Exceptions.*;
+public class ListaDoble<T> implements TADCiutada <T>{
 	private Nodo inicio,fin;
 	private int nElems;
 	public ListaDoble() {
 		inicio=fin=null;
 	}
-	public void Crear() {
+	public void crear() {
 		inicio=new Nodo(null,null,null);
 	}
 
@@ -25,6 +26,36 @@ public class ListaDoble<T> implements TADCiutada <T>,Iterable<T>,Comparable<Nodo
 		}
 		nElems++;
 	}
+	public void Inserir(int posi,T data) throws NoSePuede {
+		if(posi<0||posi>nElems) 
+			throw new NoSePuede(posi);
+		Nodo<T>aux=new Nodo<T>(data);
+		if(inicio==null) {
+			inicio=aux;
+			fin=aux;
+		}
+		else if(posi==0) {
+			aux.siguiente=inicio;
+			inicio.anterior=aux;
+			inicio=aux;
+		}
+		else if(posi==nElems) {
+			aux.anterior=fin;
+			fin.siguiente=aux;
+			fin=aux;
+		}
+		else {
+			Nodo<T>nodoAux=inicio;
+			for(int i=1;i<posi;i++) {
+				nodoAux=nodoAux.siguiente;
+			}
+			aux.siguiente=nodoAux.siguiente;
+			nodoAux.siguiente=aux;
+			aux.anterior=nodoAux;
+			aux.siguiente.anterior=aux;
+		}
+		nElems++;
+	}
 	public void recorrer() {
 		if(!empty()) {
 			String datos="<=>";
@@ -39,7 +70,7 @@ public class ListaDoble<T> implements TADCiutada <T>,Iterable<T>,Comparable<Nodo
 	public int Longitud() {
 		return nElems;
 	}
-	public T Obtenir(int posi) {
+	public T Obtenir(int posi)throws NoSePuede {
 		if(posi<nElems&&posi>0) {
 			int i=0;
 			Nodo aux=inicio;
@@ -50,8 +81,7 @@ public class ListaDoble<T> implements TADCiutada <T>,Iterable<T>,Comparable<Nodo
 			return (T)inicio;
 		}
 		else {
-			Nodo retorno=new Nodo(null,null,null);
-			return (T)retorno;
+			throw new NoSePuede(posi);
 		}
 		
 	}
@@ -81,6 +111,19 @@ public class ListaDoble<T> implements TADCiutada <T>,Iterable<T>,Comparable<Nodo
 			eliminarNodo(aux);
 			nElems--;
 		}
+	}
+	public int Buscar(T dato)throws ElementoNoEncontrado {
+		int n=1,i=0;
+		Nodo aux=inicio;
+		while(i<nElems) {
+			if(aux.data==dato) {
+				return n;
+			}
+			aux=aux.siguiente;
+			n++;i++;
+		}
+		throw new ElementoNoEncontrado(i);
+		
 	}
 
 }

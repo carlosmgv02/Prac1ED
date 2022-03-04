@@ -1,5 +1,5 @@
 package Data;
-
+import Exceptions.*;
 public interface TADCiutada<T> {
 	void crear();
 
@@ -8,9 +8,9 @@ public interface TADCiutada<T> {
 	void Inserir(T data);
 	
 	
-	void Inserir(int posicio,T data);
+	void Inserir(int posicio,T data)throws NoSePuede;
 	
-	T Obtenir(int posicio);
+	T Obtenir(int posicio)throws NoSePuede;
 	
 	
 	int Longitud();
@@ -19,6 +19,6 @@ public interface TADCiutada<T> {
 	void Esborrar(int posicio);
 	
 	
-	int Buscar(T data);
+	int Buscar(T data)throws ElementoNoEncontrado;
 	
 }
