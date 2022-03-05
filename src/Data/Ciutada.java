@@ -10,11 +10,14 @@ public class Ciutada implements Comparable<Ciutada>{
 		this.DNI=DNI;
 	}
 	public String getDni() {
+		
 		return DNI;
 	}
 	
+	
 	@Override
 	public int compareTo(Ciutada o) {
+		
 		//return (o.getDni().compareTo(nom));
 		return o.getDni().compareToIgnoreCase(DNI);
 		

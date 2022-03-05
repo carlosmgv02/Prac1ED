@@ -1,7 +1,10 @@
 package Data;
 import java.lang.Iterable;
+
+import javax.swing.JOptionPane;
+
 import Exceptions.*;
-public class ListaDoble<T> implements TADCiutada <T>{
+public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Comparable<T>{
 	private Nodo inicio,fin;
 	private int nElems;
 	public ListaDoble() {
@@ -12,6 +15,7 @@ public class ListaDoble<T> implements TADCiutada <T>{
 	}
 
 	public boolean empty() {
+		
 		return inicio==null;
 	}
 
@@ -65,20 +69,21 @@ public class ListaDoble<T> implements TADCiutada <T>{
 				auxiliar=auxiliar.siguiente;
 			}
 			System.out.println(datos);
+			
 		}
 	}
 	public int Longitud() {
 		return nElems;
 	}
 	public T Obtenir(int posi)throws NoSePuede {
-		if(posi<nElems&&posi>0) {
+		if(posi<nElems&&posi>=0) {
 			int i=0;
 			Nodo aux=inicio;
 			while(i<posi) {
-				inicio=inicio.siguiente;
+				aux=aux.siguiente;
 				i++;
 			}
-			return (T)inicio;
+			return (T)aux.data;
 		}
 		else {
 			throw new NoSePuede(posi);
@@ -116,7 +121,10 @@ public class ListaDoble<T> implements TADCiutada <T>{
 		int n=1,i=0;
 		Nodo aux=inicio;
 		while(i<nElems) {
-			if(aux.data==dato) {
+			
+			if(aux.data.compareTo(dato)==0) {
+				
+				
 				return n;
 			}
 			aux=aux.siguiente;
@@ -125,5 +133,11 @@ public class ListaDoble<T> implements TADCiutada <T>{
 		throw new ElementoNoEncontrado(i);
 		
 	}
+	@Override
+	public int compareTo(T o) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 
 }

@@ -1,6 +1,6 @@
 package Data;
 
-public class Nodo<T> {
+public class Nodo<T extends Comparable<T>> {
 	T data;
 	public Nodo siguiente;
 	public Nodo anterior;
