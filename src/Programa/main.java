@@ -1,4 +1,5 @@
 package Programa;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import Data.*;
@@ -8,8 +9,25 @@ public class main {
 	private static Scanner scan;
 	public static void main(String[] args) throws ElementoNoEncontrado, NoSePuede {
 		// TODO Auto-generated method stub
+		Boolean bool=false;
+		ListaDoble listita=new ListaDoble();
+		Ciutada ciudadano=new Ciutada("Carlos","Martínez","49424598J");
+		Ciutada ciudadano2=new Ciutada("Genis","Martínez","49422343K");
+		Ciutada ciudadano3=new Ciutada("David","Martí","77726323A");
+		
+		listita.Inserir(ciudadano2);
+		listita.Inserir(ciudadano3);
+		listita.Inserir(ciudadano);
+		listita.recorrer();
+		
+		System.out.println(listita.Buscar(ciudadano2));
+		System.out.println(listita.Buscar("Carlos"));
+		//programaPrinc();
+	}
+	public static void programaPrinc() throws ElementoNoEncontrado, NoSePuede {
 		int menOpt;
 		ListaDoble llista=null;
+		
 		do {
 		mostrarMenu();
 		scan=new Scanner(System.in);
@@ -53,9 +71,12 @@ public class main {
 		case 8:
 			llista.recorrer();
 			break;
+		default:
+			
+			break;
 		}
 		System.out.println();
-		}while(menOpt!=0);
+		}while(menOpt!=0);		
 	}
 	public static void mostrarMenu() {
 		System.out.println("BENVINGUT/UDA AL PROGRAMA: ");
@@ -79,7 +100,10 @@ public class main {
 		}catch(NumberFormatException e) {
 			resp=1;
 			System.out.println("Format de número incorrecte, opció 1 assignada per defecte");
-		}}while(resp<0||resp>8);
+		}catch(InputMismatchException e) {
+			System.out.println(e.getMessage());
+		}
+		}while(resp<0||resp>8);
 		return resp;
 	}
 
