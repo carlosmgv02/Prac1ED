@@ -1,6 +1,6 @@
 package Programa;
 import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 import Data.*;
 import Exceptions.ElementoNoEncontrado;
@@ -9,20 +9,20 @@ public class main {
 	private static Scanner scan;
 	public static void main(String[] args) throws ElementoNoEncontrado, NoSePuede {
 		// TODO Auto-generated method stub
+		programaPrinc();
 		Boolean bool=false;
-		ListaDoble listita=new ListaDoble();
+		ListaDoble <Ciutada>listita=new ListaDoble<Ciutada>();
 		Ciutada ciudadano=new Ciutada("Carlos","Martínez","49424598J");
 		Ciutada ciudadano2=new Ciutada("Genis","Martínez","49422343K");
 		Ciutada ciudadano3=new Ciutada("David","Martí","77726323A");
-		
+		Ciutada ciudadano4=new Ciutada("Mickey","Mouse","49424598Z");
+		listita.Inserir(ciudadano);
 		listita.Inserir(ciudadano2);
 		listita.Inserir(ciudadano3);
-		listita.Inserir(ciudadano);
+		listita.Inserir(ciudadano4);
+		
 		listita.recorrer();
 		
-		System.out.println(listita.Buscar(ciudadano2));
-		System.out.println(listita.Buscar("Carlos"));
-		//programaPrinc();
 	}
 	public static void programaPrinc() throws ElementoNoEncontrado, NoSePuede {
 		int menOpt;
@@ -37,12 +37,28 @@ public class main {
 			llista=new ListaDoble();
 			break;
 		case 2:
+			String name=new String();
+			String lastName=new String();
+			String id=new String();
 			if(llista==null)
 				System.out.println("ERR: la llista no s'ha creat encara");
 			else {
-			System.out.println("Introdueix l'element que vols afegir");
-			//scan=new Scanner(System.in);
-			llista.Inserir(scan.next());}
+			System.out.println("Introdueix el nom i cognom (separats per un espai) del Ciutadà que vols afegir");
+			scan.nextLine();
+			String str=scan.nextLine();
+			try {
+				name=str.split(" ")[0];
+				lastName=str.split(" ")[1];
+			}catch(ArrayIndexOutOfBoundsException e) {
+				System.out.println(e.getMessage());
+				System.out.println("Elon Musk definit per defecte");
+				name="Elon";
+				lastName="Musk";
+			}
+			System.out.println("Introdueix el DNI del ciutadà a afegir");
+			id=scan.next();
+			llista.Inserir(new Ciutada(name,lastName,id));
+			}
 			break;
 		case 3:
 			if(llista==null)

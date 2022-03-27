@@ -20,5 +20,7 @@ public interface TADCiutada<T> {
 	
 	
 	int Buscar(T data)throws ElementoNoEncontrado;
+
+	int compareTo(T o);
 	
 }

@@ -1,12 +1,14 @@
 package Data;
-import java.lang.Iterable;
+import java.util.*;
 
 import javax.swing.JOptionPane;
 
 import Exceptions.*;
-public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Comparable<T>{
+public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Iterable<Ciutada>{
 	private Nodo inicio,fin;
 	private int nElems;
+	private int posicioIterator;
+	
 	public ListaDoble() {
 		inicio=fin=null;
 	}
@@ -60,21 +62,7 @@ public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Compa
 		}
 		nElems++;
 	}
-	public void recorrer() {
-		if(!empty()) {
-			String datos="<=>";
-			Nodo auxiliar =inicio;
-			while(auxiliar !=null) {
-				datos=datos+ "["+auxiliar.data+"]<=>";
-				auxiliar=auxiliar.siguiente;
-			}
-			System.out.println(datos);
-			
-		}
-	}
-	public int Longitud() {
-		return nElems;
-	}
+	
 	public T Obtenir(int posi)throws NoSePuede {
 		if(posi<nElems&&posi>=0) {
 			int i=0;
@@ -137,6 +125,22 @@ public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Compa
 	public int compareTo(T o) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	public Iterator<Ciutada>iterator(){
+		CiutadaIterator a=new CiutadaIterator(this);
+		return a;
+	}
+	public ListaDoble copia() {
+		return this;
+	}
+	public void recorrer() {
+		Iterator<Ciutada>i=this.iterator();
+		while(i.hasNext()) {
+			System.out.println(i.next());
+		}
+	}
+	public int Longitud() {
+		return nElems;
 	}
 
 
