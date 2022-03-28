@@ -10,7 +10,6 @@ public class Ciutada implements Comparable<Ciutada>{
 		this.cognom=cognom;
 	}
 	public String getDni() {
-
 		return DNI;
 	}
 
