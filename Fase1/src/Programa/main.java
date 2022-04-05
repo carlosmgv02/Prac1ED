@@ -9,7 +9,8 @@ public class main {
 	private static Scanner scan;
 	public static void main(String[] args) throws ElementoNoEncontrado, NoSePuede {
 		// TODO Auto-generated method stub
-		programaPrinc();
+		//programaPrinc();
+		ListaDoble<Ciutada> lista=new ListaDoble<Ciutada>(4);
 		Boolean bool=false;
 		ListaDoble <Ciutada>listita=new ListaDoble<Ciutada>();
 		Ciutada ciudadano=new Ciutada("Carlos","Martínez","49424598J");
