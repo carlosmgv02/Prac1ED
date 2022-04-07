@@ -6,22 +6,25 @@ import Data.*;
 public class main {
 	public static Scanner scan;
 	public static <T extends Comparable<T>>void main(String[] args) {
+		
 		// PROGRAMA PRINCIPAL PART HASHINGS
 		HashElem[] tablaHash=new HashElem[3];
 		HashTable<T> carlos=new HashTable<T>();
+		carlos.writeFile();
 		String prueba="carlos";
 		int carlitos=3;
-
 		T data;
 		int hash=0;
 		data=(T)"calros";
 		//System.out.println(HashTable.getAlphaNumericString(300, 5));
 		long time=System.nanoTime();
-		System.out.println(carlos.getAlphaNumericString(10, 9));
+		System.out.println(carlos.getAlphaNumericString(1000, 9));
 		long endTime=System.nanoTime();
 		long duracion=(endTime-time);
 		
-		carlos.printHash();
+		//carlos.printHash();
+		System.out.println(carlos.getAlphaNumericString(1000, 9));
+		//carlos.printHash();
 		System.out.println("El algoritmo ha tardado "+duracion+" ns");
 		System.out.println("Min val= "+carlos.getMin());
 		scan=new Scanner(System.in);
