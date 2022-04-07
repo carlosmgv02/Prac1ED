@@ -1,4 +1,5 @@
 package Programa;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -18,19 +19,26 @@ public class main {
 		data=(T)"calros";
 		//System.out.println(HashTable.getAlphaNumericString(300, 5));
 		long time=System.nanoTime();
-		System.out.println(carlos.getAlphaNumericString(1000, 9));
+		carlos.getAlphaNumericString(100000, 30);
+		//System.out.println(carlos.getAlphaNumericString(1000, 9));
 		long endTime=System.nanoTime();
 		long duracion=(endTime-time);
 		
+		System.out.println();
 		//carlos.printHash();
-		System.out.println(carlos.getAlphaNumericString(1000, 9));
+		//System.out.println(carlos.getAlphaNumericString(1000, 9));
+		//carlos.getAlphaNumericString(1000, 30);
+		
 		//carlos.printHash();
 		System.out.println("El algoritmo ha tardado "+duracion+" ns");
 		System.out.println("Min val= "+carlos.getMin());
 		scan=new Scanner(System.in);
 		System.out.println(carlos.getOneSentence());
+		
+		String textoAbuscar;
+		do {
 		System.out.println("Introduce el texto a bucar");
-		String textoAbuscar=scan.nextLine();
+		textoAbuscar=scan.nextLine();
 		time=0;endTime=0;
 		System.out.println();
 		time=System.nanoTime();
@@ -38,6 +46,7 @@ public class main {
 		endTime=System.nanoTime();
 		duracion=((endTime-time));
 		System.out.println("El algoritmo de búsqueda ha tardado "+ duracion+" ns");
+		}while(!textoAbuscar.equalsIgnoreCase("-1"));
 
 	}
 	

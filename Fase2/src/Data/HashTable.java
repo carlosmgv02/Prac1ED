@@ -1,7 +1,6 @@
 package Data;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
 
 public class HashTable <T extends Comparable<T>>{
 	final int tableSize=300;
@@ -11,7 +10,11 @@ public class HashTable <T extends Comparable<T>>{
 	int counter;
 	int leastEl=0;
 	int nElems;
+	boolean firstTime=true;
+	FileWriter writer;
+	
 	public HashTable() {
+		
 		tablaHash=new HashElem[tableSize];
 		for(int x=0;x<tablaHash.length;x++) {
 			tablaHash[x]=new HashElem();
@@ -53,7 +56,8 @@ public class HashTable <T extends Comparable<T>>{
 
 		return value;
 	}
-	public String[] getAlphaNumericString(int nWords,int n)
+	//public String[] getAlphaNumericString(int nWords,int n)
+	public void getAlphaNumericString(int nWords,int n)
 	{
 		System.out.println("COUNTER= "+ counter);
 		
@@ -65,10 +69,16 @@ public class HashTable <T extends Comparable<T>>{
 
 		// create StringBuffer size of AlphaNumericString
 		int i=0;
-		for(int j=0;j<nWords;j++) {
-			try(PrintWriter writer=new PrintWriter("test.txt")){
-				
+		
+			
+		try{
+			if(firstTime)
+				writer=new FileWriter("test.csv");
+			else
+				writer=new FileWriter("test.csv",true);
 			StringBuilder pb=new StringBuilder();
+		for(int j=0;j<nWords;j++) {
+			
 			StringBuilder sb = new StringBuilder(n);
 
 			for ( i = 0; i < n; i++) {
@@ -90,18 +100,31 @@ public class HashTable <T extends Comparable<T>>{
 			//System.out.println("hash: "+key+" frase: "+sb.toString());
 			array[j]=sb.toString();
 			
-			writer.write(sb.toString()+','+'\n');
-			}catch(FileNotFoundException e) {
-				System.out.println("file not found");
-			}
+				writer.write("key= "+key+";"+sb.toString()+'\n');
+				writer.flush();
+			
+			
+			
+			
 		}
-		
-		return array;
+		}catch(IOException e) {
+			System.out.println("file not found");
+		}
+		try {
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		firstTime=false;
+
+		//return array;
 	}
 	public int findElem(T data) {
 		int posi=0;
 		int key=0;
 		key=hashKey(data);
+		//System.out.println(key);
 		if(tablaHash[key].lookFor(data)==1)
 			System.out.println("El elemento "+data+" estaba en la posición "+key);
 		else
@@ -145,7 +168,7 @@ public class HashTable <T extends Comparable<T>>{
 		return false;
 	}
 	public void resize() {
-		System.out.println("entramos");
+		
 		HashElem[]aux=new HashElem[tablaHash.length*3];
 		for(int i=0;i<tablaHash.length;i++) {
 			aux[i]=tablaHash[i];
