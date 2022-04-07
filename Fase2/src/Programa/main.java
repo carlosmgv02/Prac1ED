@@ -17,14 +17,15 @@ public class main {
 		data=(T)"calros";
 		//System.out.println(HashTable.getAlphaNumericString(300, 5));
 		long time=System.nanoTime();
-		System.out.println(carlos.getAlphaNumericString(100000, 9));
+		System.out.println(carlos.getAlphaNumericString(10, 9));
 		long endTime=System.nanoTime();
 		long duracion=(endTime-time);
-		//carlos.printHash();
+		
+		carlos.printHash();
 		System.out.println("El algoritmo ha tardado "+duracion+" ns");
 		System.out.println("Min val= "+carlos.getMin());
 		scan=new Scanner(System.in);
-		
+		System.out.println(carlos.getOneSentence());
 		System.out.println("Introduce el texto a bucar");
 		String textoAbuscar=scan.nextLine();
 		time=0;endTime=0;

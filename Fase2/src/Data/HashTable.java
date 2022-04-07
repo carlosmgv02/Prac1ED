@@ -66,7 +66,7 @@ public class HashTable <T extends Comparable<T>>{
         //System.out.println("Hash: "+hashing((T)sb.toString())+" Frase: "+sb.toString());
         //System.out.println("Hash: "+hashing((T)sb.toString())+" Frase: "+sb.toString());
         int key=hashing((T)sb.toString());
-        System.out.println("hash: "+key+" frase: "+sb.toString());
+        //System.out.println("hash: "+key+" frase: "+sb.toString());
         array[j]=sb.toString();
         }
         System.out.println("COUNTER= "+ counter);
@@ -98,6 +98,9 @@ public class HashTable <T extends Comparable<T>>{
 				minVal=tablaHash[i].nElems;
 		}
 		return minVal;
+	}
+	public String getOneSentence() {
+		return tablaHash[3].firstElem.data.toString();
 	}
 }
 
