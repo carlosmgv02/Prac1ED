@@ -2,7 +2,9 @@ package Data;
 
 public class HashTable <T extends Comparable<T>>{
 	HashElem[] tablaHash;
+	int minVal=300;
 	int counter;
+	int leastEl=0;
 	public HashTable() {
 	tablaHash=new HashElem[300];
 	for(int x=0;x<tablaHash.length;x++) {
@@ -11,33 +13,7 @@ public class HashTable <T extends Comparable<T>>{
 	//System.out.println(tablaHash[1].hashCode());
 	
 	}
-	
-	public int hash(T data) {
-		int value=0;
-		int size=300;
-		int i;
-		if(data instanceof String ) {
-			//System.out.println("String");
-			String temp=(String)data;
-			for(i=0;i<temp.length();i++) {
-				value+=temp.charAt(i)*temp.charAt((temp.length()-1)-i);
-			}
-			value=value%size;
-			if(tablaHash[value].estado!=2)
-				tablaHash[value]=new HashElem(data);
-			else if(tablaHash[value].estado==2) {
-				System.out.println("OCUPADO");
-
-				tablaHash[value].append(new Nodo(data));
-				tablaHash[value].addElems();
-				counter++;
-				return 0;}
-		}
-		
-		
-		return value;
-	}
-	public int hashing(T data) {
+	public int hashKey(T data) {
 		int value=0;
 		String temp=(String)data;
 		int i=0;
@@ -45,12 +21,19 @@ public class HashTable <T extends Comparable<T>>{
 			value=(value*3+(int)(temp.charAt(i)))%300;
 			i++;
 		}
+		return value;
+	}
+	
+	int hashing(T data) {
+		int value=hashKey(data);
 		if(tablaHash[value].estado!=2)
 			tablaHash[value]=new HashElem(data);
 		else if(tablaHash[value].estado==2) {
 			int val=0;     
-			System.out.println("OCUPADO");
+			//System.out.println("OCUPADO");
 			counter++;
+			//tablaHash[value].addElems();
+			
 			tablaHash[value].append(new Nodo(data));}
 		return value;
 	}
@@ -80,21 +63,41 @@ public class HashTable <T extends Comparable<T>>{
                           .charAt(index));
         }
         //System.out.println("Hash: "+hash((T)sb.toString())+" Frase: "+sb.toString());
-        System.out.println("Hash: "+hashing((T)sb.toString())+" Frase: "+sb.toString());
+        //System.out.println("Hash: "+hashing((T)sb.toString())+" Frase: "+sb.toString());
+        //System.out.println("Hash: "+hashing((T)sb.toString())+" Frase: "+sb.toString());
+        int key=hashing((T)sb.toString());
+        System.out.println("hash: "+key+" frase: "+sb.toString());
         array[j]=sb.toString();
         }
         System.out.println("COUNTER= "+ counter);
   
         return array;
     }
+	public int findElem(T data) {
+		int posi=0;
+		int key=0;
+		key=hashKey(data);
+		if(tablaHash[key].lookFor(data)==1)
+			System.out.println("El elemento "+data+" estaba en la posición "+key);
+		else
+			System.out.println("Element not found");
+		return posi;
+	}
 	public void printHash() {
 		int i=0;
 		while(i<300) {
 			System.out.println("Posi: "+i+", nElems= "+tablaHash[i].nElems);
-			tablaHash[i].print();
+			//tablaHash[i].print();
 			i++;
 		}
 	}
 	
+	public int getMin() {
+		for(int i=0;i<tablaHash.length;i++) {
+			if(tablaHash[i].nElems<minVal)
+				minVal=tablaHash[i].nElems;
+		}
+		return minVal;
+	}
 }
 

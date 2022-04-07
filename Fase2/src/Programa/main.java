@@ -1,40 +1,40 @@
 package Programa;
 import java.util.Arrays;
+import java.util.Scanner;
 
 import Data.*;
 public class main {
-
+	public static Scanner scan;
 	public static <T extends Comparable<T>>void main(String[] args) {
 		// PROGRAMA PRINCIPAL PART HASHINGS
 		HashElem[] tablaHash=new HashElem[3];
 		HashTable<T> carlos=new HashTable<T>();
 		String prueba="carlos";
 		int carlitos=3;
-		
-		System.out.println(carlos.hash((T)prueba));
-		String aux="solrac";
-		System.out.println(carlos.hash((T)aux));
-		
+
 		T data;
 		int hash=0;
 		data=(T)"calros";
 		//System.out.println(HashTable.getAlphaNumericString(300, 5));
-		System.out.println(carlos.getAlphaNumericString(300, 5));
-		carlos.printHash();
+		long time=System.nanoTime();
+		System.out.println(carlos.getAlphaNumericString(100000, 9));
+		long endTime=System.nanoTime();
+		long duracion=(endTime-time);
+		//carlos.printHash();
+		System.out.println("El algoritmo ha tardado "+duracion+" ns");
+		System.out.println("Min val= "+carlos.getMin());
+		scan=new Scanner(System.in);
 		
-			
-		int temp=(int)prueba.charAt(0);
-		//int aux=Integer.parseInt(prueba);
-		
-		
-		/*
-		int i,j;
-		for(i=0;i<tablaHash.length;i++) {
-			tablaHash[i]=new HashElem(i);
-		}
-		System.out.println(tablaHash[1].hashCode());
-		
-		*/
+		System.out.println("Introduce el texto a bucar");
+		String textoAbuscar=scan.nextLine();
+		time=0;endTime=0;
+		System.out.println();
+		time=System.nanoTime();
+		carlos.findElem((T)textoAbuscar);
+		endTime=System.nanoTime();
+		duracion=((endTime-time));
+		System.out.println("El algoritmo de búsqueda ha tardado "+ duracion+" ns");
+
 	}
 	
 	public void mostrarMenu() {
