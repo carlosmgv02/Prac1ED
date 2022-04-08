@@ -11,6 +11,13 @@ public class HashElem<T extends Comparable<T>> {
 		estado=2;
 		nElems=1;
 	}
+	public HashElem(int nElems,int estado,Nodo firstElem,Nodo lastNode) {
+		this.nElems=nElems;
+		this.estado=estado;
+		this.firstElem=firstElem;
+		this.lastNode=lastNode;
+		
+	}
 	public void addElems() {
 		
 	}
@@ -30,6 +37,9 @@ public class HashElem<T extends Comparable<T>> {
 		firstElem=new Nodo();
 		estado=0;
 	}
+	public HashElem copia() {
+		return new HashElem(nElems,estado,firstElem,lastNode);
+	}
 	public void print() {
 		Nodo aux=firstElem;
 		while(aux!=null) {
@@ -38,11 +48,12 @@ public class HashElem<T extends Comparable<T>> {
 		}
 		
 	}
+	
 	public int lookFor(T data) {
 		boolean found=false;
 		Nodo aux=firstElem;
 		while(aux!=null) {
-			if(aux.data.compareTo(data)==0)
+			if(aux.data.compareTo(data)==0&&aux.data!=null)
 				return 1;
 			aux=aux.nextCol;
 		}

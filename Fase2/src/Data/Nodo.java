@@ -3,6 +3,7 @@ package Data;
 public class Nodo <T extends Comparable<T>> {
 	T data;
 	Nodo nextCol;
+	
 	public Nodo(Nodo col,T data) {
 		this.data=data;
 		nextCol=col;
