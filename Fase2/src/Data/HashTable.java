@@ -72,12 +72,7 @@ public class HashTable <T extends Comparable<T>>{
 	}
 	int hashing(T data) {
 		int value=0;
-		String fileName=nElems+"numbers.csv";
-		try {
-		if(firstTime)
-			writer=new FileWriter(fileName);
-		else
-			writer=new FileWriter(fileName,true);
+		
 		
 		value=hashKey(data);
 		if(tablaHash[value]==null) {
@@ -98,12 +93,8 @@ public class HashTable <T extends Comparable<T>>{
 
 			tablaHash[value].append(new Nodo(data));
 		}
-		writer.write("key= "+value+";"+(String)data+'\n');
-		writer.flush();
-		}catch(IOException e) {
-			System.out.println(e.getMessage());
-		}
-		firstTime=false;
+		
+		
 		return value;
 	}
 	/**
@@ -153,13 +144,19 @@ public class HashTable <T extends Comparable<T>>{
 	//public String[] getAlphaNumericString(int nWords,int n)
 	public String[] getAlphaNumericString(int nWords,int n)
 	{
+		
+		
 		nElems=nWords;
 		//System.out.println("COUNTER= "+ counter);
 		String fileName=nWords+"strings.csv";
 		String[] array=new String[nWords];
 		// chose a Character random from this String
 
-
+		try {
+			if(firstTime)
+				writer=new FileWriter(fileName);
+			else
+				writer=new FileWriter(fileName,true);
 		// create StringBuffer size of AlphaNumericString
 		int i=0;
 			
@@ -172,11 +169,12 @@ public class HashTable <T extends Comparable<T>>{
 				int key=hashing((T)temp);
 				//System.out.println("hash: "+key+" frase: "+sb.toString());
 				array[j]=temp;
-
+				writer.write("key= "+key+";"+temp+'\n');
+				writer.flush();
 				
 			}
 		
-		try {
+		
 			writer.close();
 			System.out.println("-Valors guardats correctament al fitxer '"+fileName+"'");
 		} catch (IOException e) {
@@ -184,7 +182,7 @@ public class HashTable <T extends Comparable<T>>{
 			e.printStackTrace();
 		}
 		
-
+		firstTime=false;
 		return array;
 	}
 	public int findElem(T data) {
@@ -277,13 +275,23 @@ public class HashTable <T extends Comparable<T>>{
 		}
 		tablaHash=new HashElem[aux.length];
 		int i=0;
+		int mode=1;
+		int key=0;
 		for(int j=0;j<size;j++) {
 			//tablaHash[j]=aux[j];
 			if(aux[j]!=null) {
 			Nodo temp=aux[j].firstElem;
 			while(aux[j].firstElem!=null&&aux[j].firstElem.data!=null&&temp!=null) {
-				if(temp!=null&&temp.data instanceof Long)
-					hashing((Long)temp.data);
+				if(temp!=null&&temp.data instanceof Long) {
+					key=hashing((Long)temp.data);
+					try {
+						writeFile(nElems,(T)temp.data,key,mode);
+						mode=2;
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 				else if(temp!=null)
 					hashing((T)temp.data);
 				
@@ -305,6 +313,20 @@ public class HashTable <T extends Comparable<T>>{
 			i++;
 		}
 		return temp;
+	}
+	public void writeFile(int nElems,T sentence,int key,int mode) throws IOException {
+		String fileName=nElems+"strings.csv";
+		if(mode==1) {
+			writer=new FileWriter(fileName);
+		}
+		else
+			writer=new FileWriter(fileName,true);
+		if(sentence instanceof T)
+			writer.write("key= "+key+";"+(String)sentence+'\n');
+		else if (sentence instanceof Float)
+			writer.write("key= "+key+";"+(Long)sentence+'\n');
+		writer.flush();
+		
 	}
 	
 
