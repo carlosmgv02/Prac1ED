@@ -2,9 +2,12 @@ package Data;
 
 import java.io.*;
 
+import Programa.main;
+
 public class HashTable <T extends Comparable<T>>{
 	int tableSize=10;
 	HashElem[] tablaHash;
+	String fileName;
 	int firstElem;
 	int minVal=300;
 	int counter;
@@ -24,7 +27,11 @@ public class HashTable <T extends Comparable<T>>{
 	}
 	public int hashKey(T data) {
 		int value=0;
-		String temp=(String)data;
+		String temp=new String();
+		if(data instanceof Integer)
+			temp=data.toString();
+		else
+			temp=(String)data;
 		int i=0;
 		while(i<temp.length()) {
 			value=(value*3+(int)(temp.charAt(i)))%tableSize;
@@ -55,8 +62,8 @@ public class HashTable <T extends Comparable<T>>{
 	 */
 	int hashing(long data) {
 		int value=hashKey(data);
-		if(tablaHash[value]==null)
-			tablaHash[value]=new HashElem();
+		if(tablaHash[value]==null) {
+			tablaHash[value]=new HashElem();}
 		if(tablaHash[value].estado!=2) {
 			tablaHash[value]=new HashElem(data);
 			firstElem=value;
@@ -67,6 +74,7 @@ public class HashTable <T extends Comparable<T>>{
 		else if (tablaHash[value].estado==2) {
 			counter++;
 			tablaHash[value].append(new Nodo(data));
+			//nElems++;
 		}
 		return value;
 	}
@@ -89,6 +97,7 @@ public class HashTable <T extends Comparable<T>>{
 			int val=0;     
 			//System.out.println("OCUPADO");
 			counter++;
+			//nElems++;
 			//tablaHash[value].addElems();
 
 			tablaHash[value].append(new Nodo(data));
@@ -104,11 +113,12 @@ public class HashTable <T extends Comparable<T>>{
 	 * @return array of generated long numbers
 	 */
 	public long[] getNumericLong(Integer nNumbers,long nDigits) {
-		nElems=nNumbers;
+		//nElems=nNumbers;
 		long leftLimit=1L;
 		long rightLimit;
-		long number;
-		String fileName=nNumbers.toString().concat("numbers.csv");
+		long number;int key;
+		fileName=nNumbers.toString().concat("numbers.csv");
+		FileWriter escribir=null;
 		long [] array=new long[nNumbers];
 		for(int i=0;i<nDigits-1;i++) {
 			leftLimit*=10;
@@ -117,16 +127,18 @@ public class HashTable <T extends Comparable<T>>{
 		rightLimit=(leftLimit*10)-1;
 		try{
 			if(firstTime)
-				writer=new FileWriter(fileName);
+				escribir=new FileWriter(fileName);
 			else
-				writer=new FileWriter(fileName,true);
+				escribir=new FileWriter(fileName,true);
+			
 			for(int i =0;i<nNumbers;i++) {
 				number=leftLimit+(long)(Math.random()*(rightLimit-leftLimit));
-				int key=hashing(number);
+				key=hashing(number);
 				array[i]=number;
-
-				writer.write("key= "+key+";"+number+'\n');
-				writer.flush();
+				System.out.println("1-key= "+key+" n= "+number);
+				escribir.write("key= "+key+";"+number+'\n');
+				escribir.flush();
+				//nElems++;
 			}
 		}catch(IOException e) {
 			System.out.println("file not found");
@@ -146,9 +158,9 @@ public class HashTable <T extends Comparable<T>>{
 	{
 		
 		
-		nElems=nWords;
+		//nElems=nWords;
 		//System.out.println("COUNTER= "+ counter);
-		String fileName=nWords+"strings.csv";
+		fileName=nWords+"strings.csv";
 		String[] array=new String[nWords];
 		// chose a Character random from this String
 
@@ -167,11 +179,11 @@ public class HashTable <T extends Comparable<T>>{
 
 
 				int key=hashing((T)temp);
-				//System.out.println("hash: "+key+" frase: "+sb.toString());
+				//System.out.println("1- key: "+key+" frase: "+temp);
 				array[j]=temp;
 				writer.write("key= "+key+";"+temp+'\n');
 				writer.flush();
-				
+				//nElems++;
 			}
 		
 		
@@ -226,7 +238,7 @@ public class HashTable <T extends Comparable<T>>{
 			int index
 			= (int)(AlphaNumericString.length()
 					* Math.random());
-
+			
 			// add Character one by one in end of sb
 			sb.append(AlphaNumericString
 					.charAt(index));
@@ -284,17 +296,25 @@ public class HashTable <T extends Comparable<T>>{
 			while(aux[j].firstElem!=null&&aux[j].firstElem.data!=null&&temp!=null) {
 				if(temp!=null&&temp.data instanceof Long) {
 					key=hashing((Long)temp.data);
-					try {
+					
+					/*try {
 						writeFile(nElems,(T)temp.data,key,mode);
 						mode=2;
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
+					}*/
 				}
-				else if(temp!=null)
-					hashing((T)temp.data);
-				
+				else {
+					key=hashing((T)temp.data);
+					/*try {
+						writeFile(nElems,(T)temp.data,key,mode);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}*/
+				}
+				//System.out.println("2- key= "+key+" n= "+temp.data);
 				temp=temp.nextCol;
 			}
 			}
@@ -314,20 +334,66 @@ public class HashTable <T extends Comparable<T>>{
 		}
 		return temp;
 	}
+	/*
 	public void writeFile(int nElems,T sentence,int key,int mode) throws IOException {
-		String fileName=nElems+"strings.csv";
 		if(mode==1) {
-			writer=new FileWriter(fileName);
+			writer=new FileWriter(fileName,true);
 		}
 		else
 			writer=new FileWriter(fileName,true);
 		if(sentence instanceof T)
-			writer.write("key= "+key+";"+(String)sentence+'\n');
+			writer.write("key= "+key+";"+sentence+'\n');
 		else if (sentence instanceof Float)
 			writer.write("key= "+key+";"+(Long)sentence+'\n');
 		writer.flush();
 		
-	}
+	}*/
+	public void writeFile (T[]data,int nElems) {
+		String fileName=new String();
+		FileWriter escribir=null;
+		int key;
+		try {
+		if((data instanceof Long[])||(data instanceof Integer[])) {
+			fileName=nElems+"numbers.csv";
+		}
+		else
+			fileName=nElems+"string.csv";
+
+			escribir=new FileWriter(fileName);
+		}catch(IOException e) {
+			System.out.println(e.getMessage());
+		}
+			// TODO Auto-generated catch block
+			
+		
+		for(int i=0;i<nElems;i++) {
+			
+			if((data instanceof Long[])||(data instanceof Integer[])) {
+				key=hashing((Long)data[i]);
+				long n=(Long)data[i];
+				try {
+					writer.write("key= "+key+";"+n+'\n');
+					writer.flush();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+			else {
+				key=hashing(data[i]);
+				String temp=(String)data[i];
+				try {
+					escribir.write("key= "+key+";"+temp+'\n');
+					escribir.flush();
+				}catch(IOException e) {
+					System.out.println(e.getMessage());
+				}
+			}
+			
+		}
+		
+		}
 	
 
 }

@@ -1,6 +1,6 @@
 package Data;
 
-public class Nodo <T extends Comparable<T>> {
+public class Nodo<T extends Comparable<T>>  {
 	T data;
 	Nodo nextCol;
 	
@@ -8,8 +8,8 @@ public class Nodo <T extends Comparable<T>> {
 		this.data=data;
 		nextCol=col;
 	}
-	public Nodo(T data) {
-		this(null,data);
+	public Nodo(T data2) {
+		this(null,data2);
 	}
 	public Nodo() {
 		this(null,null);
@@ -29,5 +29,6 @@ public class Nodo <T extends Comparable<T>> {
 	public Nodo copia() {
 		return new Nodo(nextCol,data);
 	}
+	
 	
 }

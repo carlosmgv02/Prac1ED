@@ -7,12 +7,17 @@ import java.util.Scanner;
 import Data.*;
 public class main {
 	public static Scanner scan;
-	public static <T extends Comparable<T>>void main(String[] args)throws InterruptedException  {
+	public static <T extends Comparable<T>>void main(String[] args)throws InterruptedException, IOException  {
 		
 		// PROGRAMA PRINCIPAL PART HASHINGS
-		mostrarMenu();
+		
+		//mostrarMenu();
 		HashTable prueba=new HashTable();
-		prueba.getAlphaNumericString(10, 5);
+		int[]numeros= {1,2,3,4};
+		String[]carlos= {"carlos","david","marc","ivan"};
+		System.out.println(carlos[2]);
+		//prueba.writeFile(numeros, 4);
+		/*prueba.getAlphaNumericString(10, 5);
 		prueba.resize();
 		System.out.println("Hash when elements are 300: "+prueba.hashKey("PRjrdszuREmEbkT"));
 		System.out.println("Hash when elements are 300: "+prueba.hashKey("g0XUjqZlMbzzJyK"));
@@ -21,7 +26,7 @@ public class main {
 		System.out.println("Hash when elements are 600: "+prueba.hashKey("PRjrdszuREmEbkT"));
 		System.out.println("Hash when elements are 600: "+prueba.hashKey("g0XUjqZlMbzzJyK"));
 		System.out.println("Hash when elements are 600: "+prueba.hashKey("OFDe7gRjEv3OSou"));
-		
+		*/
 		
 	}
 	
@@ -78,10 +83,35 @@ public class main {
 			nElems*=10;i++;
 		}while(nElems<100000);
 		
+		int n=0;
+		
+		do {
+		searchElement(numbers);n++;
+		}while(n<4);
 	}
 	public static void separator() {
 		System.out.println("**********************************************************");
 	}
 	
+	public static <T> void searchElement(HashTable table) {
+		
+		System.out.println("Escribe el elemento que quieras ");
+		scan=new Scanner(System.in);
+		String data=scan.next();
+		
+		if(isNumeric(data)) {
+			table.findElem(Long.parseLong(data));
+		}
+		else
+			table.findElem(data);
+	}
+	public static boolean isNumeric(String str) { 
+		  try {  
+		    Double.parseDouble(str);  
+		    return true;
+		  } catch(NumberFormatException e){  
+		    return false;  
+		  }  
+		}
 	
 }
