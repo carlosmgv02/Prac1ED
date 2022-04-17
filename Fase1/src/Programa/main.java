@@ -9,34 +9,40 @@ public class main {
 	private static Scanner scan;
 	public static void main(String[] args) throws ElementoNoEncontrado, NoSePuede {
 		// TODO Auto-generated method stub
-		//programaPrinc();
 		ListaDoble<Ciutada> lista=new ListaDoble<Ciutada>(4);
 		Boolean bool=false;
 		ListaDoble <Ciutada>listita=new ListaDoble<Ciutada>();
 		Ciutada ciudadano=new Ciutada("Carlos","Martínez","49424598J");
 		Ciutada ciudadano2=new Ciutada("Genis","Martínez","49422343K");
 		Ciutada ciudadano3=new Ciutada("David","Martí","77726323A");
-		Ciutada ciudadano4=new Ciutada("Mickey","Mouse","49424598Z");
+		Ciutada ciudadano4=new Ciutada("Albert","Solé","49424598Z");
 		listita.Inserir(ciudadano);
 		listita.Inserir(ciudadano2);
 		listita.Inserir(ciudadano3);
 		listita.Inserir(ciudadano4);
+		programaPrinc(listita);
 		
 		listita.recorrer();
 		
 	}
-	public static void programaPrinc() throws ElementoNoEncontrado, NoSePuede {
+	public static<T> void programaPrinc(ListaDoble llista) throws ElementoNoEncontrado, NoSePuede {
 		int menOpt;
-		ListaDoble llista=null;
+		//ListaDoble llista=null;
 		
 		do {
 		mostrarMenu();
 		scan=new Scanner(System.in);
 		menOpt=llegirOpcio();
 		switch(menOpt) {
+		/**
+		 * 1-Creació de la llista doblement encadenada
+		 */
 		case 1:
 			llista=new ListaDoble();
 			break;
+		/**
+		 * 2-Demanem a l'usuari un Ciutadà i l'afegim a la llista
+		 */
 		case 2:
 			String name=new String();
 			String lastName=new String();
@@ -61,6 +67,9 @@ public class main {
 			llista.Inserir(new Ciutada(name,lastName,id));
 			}
 			break;
+		/**
+		 * 3-Demanem una posició i un usuari i l'afegim a la llista en cas de ser possible
+		 */
 		case 3:
 			if(llista==null)
 				System.out.println("ERR: la llista no s'ha creat encara");
@@ -69,9 +78,16 @@ public class main {
 			System.out.println("Introdueix la posició on vols inserir l'element");
 			int posi=scan.nextInt();
 			System.out.println("Introdueix l'element que vols afegir");
-			llista.Inserir(posi,scan.next());}
-			
+			System.out.println("LLISTA ABANS DE PROVAR INSERCIÓ");
+			llista.recorrer();
+			llista.Inserir(posi,readCiutada());}
+			System.out.println();
+			System.out.println("LLISTA DESPRÉS DE PROVAR INSERCIÓ");
+			llista.recorrer();
 			break;
+		/**
+		 * 4-Demanem una posició i retornem el seu element en cas de ser possible
+		 */
 		case 4:
 			System.out.println("Introdueix la posició desitjada per a obtenir el seu element: ");
 			int ind=scan.nextInt();
@@ -79,10 +95,43 @@ public class main {
 			System.out.println(llista.Obtenir(ind));
 			
 			break;
+		/**
+		 * 5-Retornem la longitud de la llista doblement encadenada
+		 */
+		case 5:
+			System.out.println("La longitud de la llista doblement encadenada es "+llista.Longitud());
+			break;
+		/**
+		 * 6-Demanem una posició i esborrem l'element que es troba en ella en cas de ser possible
+		 */
+		case 6:
+			int toDelete=0;
+			int length=0;
+			System.out.println("Introdueix l'index de la posició que vols eliminar");
+			try {
+			toDelete=scan.nextInt();
+			}catch(NumberFormatException e) {
+				System.out.println(e.getMessage());
+			}
+			System.out.println("LLISTA ABANS DE PROVAR ELIMINACIÓ");
+			llista.recorrer();
+			System.out.println();
+			llista.Esborrar(toDelete);
+			if(llista.Longitud()!=length)
+				System.out.println("S'ha esborrat l'element correctament");
+			else
+				System.out.println("No s'ha esborrat cap element");
+			System.out.println("LLISTA DESPRÉS DE PROVAR ELIMINACIÓ");
+			llista.recorrer();
+			break;
+		/**
+		 * 7-Demanem un número de DNI i intentem trobar si hi ha alguna coincidència
+		 */
 		case 7:
 			System.out.println("Introdueix l'element que vols buscar: ");
 			//scan=new Scanner(System.in);
-			int n=llista.Buscar(scan.next());
+			String temp=scan.next();
+			int n=llista.Buscar(temp);
 			System.out.println("S'han mirat "+n+ " elements fins a trobar el que buscaves");
 			break;
 		case 8:
@@ -108,6 +157,11 @@ public class main {
 		System.out.println("0- SORTIR");
 		System.out.printf("R: ");
 	}
+	
+	/**
+	 * Demanem la opció del menú que vol executar l'usuari
+	 * @return num d'opció
+	 */
 	public static int llegirOpcio() {
 		scan=new Scanner(System.in);
 		int resp=0;
@@ -123,5 +177,22 @@ public class main {
 		}while(resp<0||resp>8);
 		return resp;
 	}
+	/**
+	 * Llegim dades d'un nou usuari que crearem i retornarem
+	 * @return new Ciutadà(nom,cognom,DNI);
+	 */
+	public static Ciutada readCiutada() {
+		Ciutada aux=null;
+		String nom,cognom,DNI=new String();
+		System.out.println("Introdueix el nom del ciutadà");
+		nom=scan.next();
+		System.out.println("Introdueix el cognom del ciutadà");
+		cognom=scan.next();
+		System.out.println("Introdueix el DNI del ciutadà");
+		DNI=scan.next();
+		aux=new Ciutada(nom,cognom,DNI);
+		return aux;
+	}
+	
 
 }

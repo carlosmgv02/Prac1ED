@@ -4,7 +4,6 @@ import java.util.*;
 
 import Exceptions.NoSePuede;
 
-
 public class CiutadaIterator<T extends Comparable <T>>implements Iterator<Ciutada> {
 	ListaDoble list;
 	int posi;
@@ -12,6 +11,9 @@ public class CiutadaIterator<T extends Comparable <T>>implements Iterator<Ciutad
 	list=aux.copia();
 	posi=0;
 	}
+	/**
+	 * Mètode de la interfície
+	 */
 	@Override
 	public boolean hasNext() {
 		try {
@@ -23,7 +25,10 @@ public class CiutadaIterator<T extends Comparable <T>>implements Iterator<Ciutad
 		return false;
 		
 	}
-
+	
+	/**
+	 * Mètode de la interfície
+	 */
 	@Override
 	public Ciutada next() {
 		Ciutada elem=null;

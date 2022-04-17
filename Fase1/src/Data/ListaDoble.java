@@ -1,17 +1,19 @@
 package Data;
 import java.util.*;
 
-import javax.swing.JOptionPane;
-
 import Exceptions.*;
 public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Iterable<Ciutada>{
 	private Nodo inicio,fin;
 	private int nElems;
 	private int posicioIterator;
-	
+
 	public ListaDoble() {
 		inicio=fin=null;
 	}
+	/**
+	 * Creació de la llista doblement encadenada donada una mida
+	 * @param nElems
+	 */
 	public ListaDoble(int nElems) {
 		int i=0;
 		inicio=new Nodo(null);
@@ -22,18 +24,27 @@ public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Itera
 			nodoAux.siguiente.anterior=nodoAux;
 			nodoAux=nodoAux.siguiente;
 			this.nElems++;i++;
-			
+
 		}
 	}
+	/**
+	 * Inicialització del primer element de la llista encadenada
+	 */
 	public void crear() {
 		inicio=new Nodo(null,null,null);
 	}
-
+	/**
+	 * Mètode que comprova si la llista està plena o no
+	 * @return true if empty | false if not
+	 */
 	public boolean empty() {
-		
+
 		return inicio==null;
 	}
-
+	/**
+	 * Mètode per a inserir un element al final de la llista
+	 * @param data: dada a afegir
+	 */
 	public void Inserir(T data) {
 		if(!empty()) {
 			fin=new Nodo(null,fin,data);
@@ -45,6 +56,11 @@ public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Itera
 		}
 		nElems++;
 	}
+	/**
+	 * Mètode per a inserir un element donada una posició
+	 * @param posi: index on afegir
+	 * @param data: dada a afegir
+	 */
 	public void Inserir(int posi,T data) throws NoSePuede {
 		if(posi<0||posi>nElems) 
 			throw new NoSePuede(posi);
@@ -75,7 +91,10 @@ public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Itera
 		}
 		nElems++;
 	}
-	
+	/**
+	 * Mètode per a retornar l'element d'una posició donada en cas de ser possible
+	 * @param posi: index de la posició
+	 */
 	public T Obtenir(int posi)throws NoSePuede {
 		if(posi<nElems&&posi>=0) {
 			int i=0;
@@ -89,22 +108,31 @@ public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Itera
 		else {
 			throw new NoSePuede(posi);
 		}
-		
+
 	}
+	
+	/**
+	 * Mètode per a esborrar un node, utilitzat al mètode 'Esborrar(int posi)'
+	 * @param elem: node a eliminar de la llista
+	 */
 	public void eliminarNodo(Nodo elem) {
 		if(inicio==null||elem==null)
 			return;
 		if(inicio==elem)
 			inicio=elem.siguiente;
-		
+
 		//Ant<->Actual<->Siguiente
 		//Ant<->Siguiente
 		if(elem.siguiente!=null)
 			elem.siguiente.anterior=elem.anterior;
-		
+
 		if(elem.anterior!=null)
 			elem.anterior.siguiente=elem.siguiente;
 	}
+	/**
+	 * Mètode per a esborrar un element donada una posició
+	 * @param posi: índex de l'element que es vol esborrar
+	 */
 	public void Esborrar(int posi) {
 		if(posi>0 && posi<nElems) {
 			Nodo aux=inicio;
@@ -114,44 +142,64 @@ public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Itera
 			}
 			if(aux==null)
 				return;
+
 			eliminarNodo(aux);
 			nElems--;
+
 		}
+
 	}
+	/**
+	 * Mètode per a comprovar si existeix a la llista un element passat per paràmetre
+	 * @param dato: element que volem buscar a la llista
+	 */
 	public int Buscar(T dato)throws ElementoNoEncontrado {
 		int n=1,i=0;
 		Nodo aux=inicio;
+		String temp=new String();
+		if(dato instanceof String)
+			temp=(String)dato;
+
 		while(i<nElems) {
-			
-			if(aux.data.compareTo(dato)==0) {
-				
-				
-				return n;
+			if(aux.data instanceof Ciutada&&dato instanceof Ciutada) {
+				if(aux.data.compareTo(temp)==0) 
+					return n;
 			}
+			else if (aux.data.compareTo(new Ciutada(null,null,temp))==0)
+				return n;
 			aux=aux.siguiente;
 			n++;i++;
 		}
 		throw new ElementoNoEncontrado(i);
-		
+
 	}
-	@Override
-	public int compareTo(T o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	
+	/**
+	 * Mètode de l'iterator
+	 */
 	public Iterator<Ciutada>iterator(){
 		CiutadaIterator a=new CiutadaIterator(this);
 		return a;
 	}
+	/**
+	 * Mètode per a duplicar llista actual
+	 * @return copia
+	 */
 	public ListaDoble copia() {
 		return this;
 	}
+	/**
+	 * Mètode per a imprimir la llista, utilitzem el mètode iterator()
+	 */
 	public void recorrer() {
 		Iterator<Ciutada>i=this.iterator();
 		while(i.hasNext()) {
 			System.out.println(i.next());
 		}
 	}
+	/**
+	 * Mètode que retorna la longitud de la llista actual
+	 */
 	public int Longitud() {
 		return nElems;
 	}
