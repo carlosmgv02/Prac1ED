@@ -1,5 +1,4 @@
 package Data;
-
 import java.io.*;
 
 import Programa.main;
@@ -28,7 +27,7 @@ public class HashTable <T extends Comparable<T>>{
 	public int hashKey(T data) {
 		int value=0;
 		String temp=new String();
-		if(data instanceof Integer)
+		if(data instanceof Integer||data instanceof Long)
 			temp=data.toString();
 		else
 			temp=(String)data;
@@ -60,6 +59,7 @@ public class HashTable <T extends Comparable<T>>{
 	 * @param data integer we want to assign
 	 * @return
 	 */
+
 	int hashing(long data) {
 		int value=hashKey(data);
 		if(tablaHash[value]==null) {
@@ -78,10 +78,17 @@ public class HashTable <T extends Comparable<T>>{
 		}
 		return value;
 	}
-	int hashing(T data) {
+	/*
+	int hashing(Ciutada user) {
+		//int key=(prueba1.hashCode()&0x7fffffff)%300;
+		int key=(user.getDni().hashCode()&0x7fffffff);
+		return key;
+	}
+	 */
+	public int hashing(T data) {
+
+
 		int value=0;
-		
-		
 		value=hashKey(data);
 		if(tablaHash[value]==null) {
 			tablaHash[value]=new HashElem();
@@ -102,8 +109,8 @@ public class HashTable <T extends Comparable<T>>{
 
 			tablaHash[value].append(new Nodo(data));
 		}
-		
-		
+
+
 		return value;
 	}
 	/**
@@ -130,7 +137,7 @@ public class HashTable <T extends Comparable<T>>{
 				escribir=new FileWriter(fileName);
 			else
 				escribir=new FileWriter(fileName,true);
-			
+
 			for(int i =0;i<nNumbers;i++) {
 				number=leftLimit+(long)(Math.random()*(rightLimit-leftLimit));
 				key=hashing(number);
@@ -145,7 +152,7 @@ public class HashTable <T extends Comparable<T>>{
 		}
 		try {
 			System.out.println("-Valors guardats correctament al fitxer '"+fileName+"'");
-			writer.close();
+			escribir.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -156,8 +163,8 @@ public class HashTable <T extends Comparable<T>>{
 	//public String[] getAlphaNumericString(int nWords,int n)
 	public String[] getAlphaNumericString(int nWords,int n)
 	{
-		
-		
+
+
 		//nElems=nWords;
 		//System.out.println("COUNTER= "+ counter);
 		fileName=nWords+"strings.csv";
@@ -169,9 +176,9 @@ public class HashTable <T extends Comparable<T>>{
 				writer=new FileWriter(fileName);
 			else
 				writer=new FileWriter(fileName,true);
-		// create StringBuffer size of AlphaNumericString
-		int i=0;
-			
+			// create StringBuffer size of AlphaNumericString
+			int i=0;
+
 			StringBuilder pb=new StringBuilder();
 			for(int j=0;j<nWords;j++) {
 				String temp=randomString(n);
@@ -185,15 +192,15 @@ public class HashTable <T extends Comparable<T>>{
 				writer.flush();
 				//nElems++;
 			}
-		
-		
+
+
 			writer.close();
 			System.out.println("-Valors guardats correctament al fitxer '"+fileName+"'");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		firstTime=false;
 		return array;
 	}
@@ -238,7 +245,7 @@ public class HashTable <T extends Comparable<T>>{
 			int index
 			= (int)(AlphaNumericString.length()
 					* Math.random());
-			
+
 			// add Character one by one in end of sb
 			sb.append(AlphaNumericString
 					.charAt(index));
@@ -283,7 +290,7 @@ public class HashTable <T extends Comparable<T>>{
 		HashElem[]aux=new HashElem[tableSize];
 		for(int i=0;i<tablaHash.length;i++) {
 			aux[i]=tablaHash[i];
-			
+
 		}
 		tablaHash=new HashElem[aux.length];
 		int i=0;
@@ -292,36 +299,37 @@ public class HashTable <T extends Comparable<T>>{
 		for(int j=0;j<size;j++) {
 			//tablaHash[j]=aux[j];
 			if(aux[j]!=null) {
-			Nodo temp=aux[j].firstElem;
-			while(aux[j].firstElem!=null&&aux[j].firstElem.data!=null&&temp!=null) {
-				if(temp!=null&&temp.data instanceof Long) {
-					key=hashing((Long)temp.data);
-					
-					/*try {
+				Nodo temp=aux[j].firstElem;
+				while(aux[j].firstElem!=null&&aux[j].firstElem.data!=null&&temp!=null) {
+					if(temp!=null&&temp.data instanceof Long) {
+						System.out.println(temp.data);
+						key=hashing((Long) temp.data);
+
+						/*try {
 						writeFile(nElems,(T)temp.data,key,mode);
 						mode=2;
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}*/
-				}
-				else {
-					key=hashing((T)temp.data);
-					/*try {
+					}
+					else {
+						key=hashing((T)temp.data);
+						/*try {
 						writeFile(nElems,(T)temp.data,key,mode);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}*/
+					}
+					//System.out.println("2- key= "+key+" n= "+temp.data);
+					temp=temp.nextCol;
 				}
-				//System.out.println("2- key= "+key+" n= "+temp.data);
-				temp=temp.nextCol;
-			}
 			}
 		}
 
 	}
-	
+
 	public void setNelems(int nElems) {
 		this.tableSize=nElems;
 	}
@@ -346,55 +354,64 @@ public class HashTable <T extends Comparable<T>>{
 		else if (sentence instanceof Float)
 			writer.write("key= "+key+";"+(Long)sentence+'\n');
 		writer.flush();
-		
+
 	}*/
-	public void writeFile (T[]data,int nElems) {
+	public void writeFile () {
 		String fileName=new String();
 		FileWriter escribir=null;
+		int nElems=tablaHash.length;
+		Nodo temp=new Nodo();
 		int key;
 		try {
-		if((data instanceof Long[])||(data instanceof Integer[])) {
-			fileName=nElems+"numbers.csv";
-		}
-		else
-			fileName=nElems+"string.csv";
+
+			fileName="hashCodes.csv";
+
+
 
 			escribir=new FileWriter(fileName);
 		}catch(IOException e) {
 			System.out.println(e.getMessage());
 		}
-			// TODO Auto-generated catch block
-			
-		
+		// TODO Auto-generated catch block
+
+
 		for(int i=0;i<nElems;i++) {
-			
-			if((data instanceof Long[])||(data instanceof Integer[])) {
-				key=hashing((Long)data[i]);
-				long n=(Long)data[i];
-				try {
-					writer.write("key= "+key+";"+n+'\n');
-					writer.flush();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
+			try {
+				if(tablaHash[i]!=null) {
+					temp=tablaHash[i].firstElem;
+					while(tablaHash[i].firstElem!=null&&tablaHash[i].firstElem.data!=null&&temp!=null) {
+						if(temp.data instanceof Long||temp.data instanceof Integer) {
+
+
+							try {
+								escribir.write("key= "+i+";"+temp.data+'\n');
+								escribir.flush();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
+						}
+						else {
+
+							try {
+								escribir.write("key= "+i+";"+temp.data+'\n');
+								escribir.flush();
+							}catch(IOException e) {
+								System.out.println(e.getMessage());
+							}
+						}
+						temp=temp.nextCol;	
+					}
+				} 
+			}catch(NullPointerException e) {
+				System.out.println(e.getMessage());
 			}
-			else {
-				key=hashing(data[i]);
-				String temp=(String)data[i];
-				try {
-					escribir.write("key= "+key+";"+temp+'\n');
-					escribir.flush();
-				}catch(IOException e) {
-					System.out.println(e.getMessage());
-				}
-			}
-			
+
 		}
-		
-		}
-	
+
+	}
+
 
 }
 

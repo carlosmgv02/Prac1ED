@@ -1,4 +1,6 @@
 package Programa;
+
+import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.Thread;
 import java.util.Arrays;
@@ -8,11 +10,19 @@ import Data.*;
 public class main {
 	public static Scanner scan;
 	public static <T extends Comparable<T>>void main(String[] args)throws InterruptedException, IOException  {
+		//Ciutada prueba1=new Ciutada("Carlos","Martinez","49424598T");
 		
+		Ciutada prueba2=new Ciutada("Carlos","Martinez","49424598J");
+		String prueba1=new String("carlos");
+		
+		//System.out.println(prueba2.hashCode());
 		// PROGRAMA PRINCIPAL PART HASHINGS
 		
-		//mostrarMenu();
+		mostrarMenu();
+		
 		HashTable prueba=new HashTable();
+		generateNumber(prueba,15);
+		prueba.resize();
 		int[]numeros= {1,2,3,4};
 		String[]carlos= {"carlos","david","marc","ivan"};
 		System.out.println(carlos[2]);
@@ -66,7 +76,8 @@ public class main {
 			
 			//We add the long numbers to the long array called 'digits'
 			initTime=System.nanoTime();
-			digits=numbers.getNumericLong(nElems, 15);
+			digits=generateNumber(numbers,nElems);
+			//numbers.printHash();
 			endTime=System.nanoTime();
 			duration=(endTime-initTime);
 			System.out.println("\tAfegir els "+nElems+" longs ha trigat "+duration+" ns");
@@ -85,14 +96,56 @@ public class main {
 		
 		int n=0;
 		
-		do {
+		/*do {
 		searchElement(numbers);n++;
 		}while(n<4);
+		*/
+		numbers.writeFile();
 	}
 	public static void separator() {
 		System.out.println("**********************************************************");
 	}
-	
+	public static long[] generateNumber(HashTable has,Integer nElems) {
+		long nDigits=15L;
+		long leftLimit=1L;
+		long rightLimit;
+		long number;int key;
+		String fileName=new String();
+		
+		fileName=nElems.toString().concat("numbers.csv");
+		FileWriter escribir=null;
+		long [] array=new long[nElems];
+		for(int i=0;i<nDigits-1;i++) {
+			leftLimit*=10;
+
+		}
+		rightLimit=(leftLimit*10)-1;
+		try{
+			escribir=new FileWriter(fileName);
+			for(int i =0;i<nElems;i++) {
+				number=leftLimit+(long)(Math.random()*(rightLimit-leftLimit));
+				key=has.hashing(number);
+				array[i]=number;
+				//System.out.println("1-key= "+key+" n= "+number);
+				escribir.write("key= "+key+";"+number+'\n');
+				escribir.flush();
+				//nElems++;
+			}
+		}catch(IOException e) {
+			System.out.println("file not found");
+		}
+		try {
+			System.out.println("-Valors guardats correctament al fitxer '"+fileName+"'");
+			escribir.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return array;
+	}
+	public void generateString(int nElems) {
+		
+	}
 	public static <T> void searchElement(HashTable table) {
 		
 		System.out.println("Escribe el elemento que quieras ");
