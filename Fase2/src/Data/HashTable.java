@@ -356,6 +356,31 @@ public class HashTable <T extends Comparable<T>>{
 		writer.flush();
 
 	}*/
+
+	public void printNelems(int nElems) {
+		Nodo aux=new Nodo();
+		String toWrite=new String();
+		String fileName=new String("hsahing.csv");
+		try {
+			writer=new FileWriter(fileName);
+		
+		if(nElems<tablaHash.length) {
+			for(int i=nElems;i<tablaHash.length;i++) {
+				if(tablaHash[i]!=null) {
+					aux=tablaHash[i].firstElem;
+					while(aux!=null) {
+						System.out.println("key= "+i+", data= "+aux.data);
+						writer.write("key= "+i+";"+aux.data+'\n');
+						writer.flush();
+						aux=aux.nextCol;
+					}
+				}
+			}
+		}
+		}catch(IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
 	public void writeFile () {
 		String fileName=new String();
 		FileWriter escribir=null;

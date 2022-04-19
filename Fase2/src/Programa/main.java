@@ -24,8 +24,6 @@ public class main {
 		generateNumber(prueba,15);
 		prueba.resize();
 		int[]numeros= {1,2,3,4};
-		String[]carlos= {"carlos","david","marc","ivan"};
-		System.out.println(carlos[2]);
 		//prueba.writeFile(numeros, 4);
 		/*prueba.getAlphaNumericString(10, 5);
 		prueba.resize();
@@ -67,7 +65,7 @@ public class main {
 			
 			//We add the strings to the string array called 'sentence'
 			separator();
-			System.out.println(i);
+			//System.out.println(i);
 			initTime=System.nanoTime();
 			sentence=strings.getAlphaNumericString(nElems, 15);	//15 is the length of the string
 			endTime=System.nanoTime();	
@@ -87,7 +85,7 @@ public class main {
 			for(int j=0;j<nElems/5;j++) {
 				String elem=sentence[j*2];
 				//System.out.println("posi :"+j*2+" elem");
-				strings.findElem(sentence[j*2]);
+				//strings.findElem(sentence[j*2]);
 				
 			}
 			//t.sleep(1500);
@@ -95,11 +93,12 @@ public class main {
 		}while(nElems<100000);
 		
 		int n=0;
-		
-		/*do {
+		System.out.println("NUMBERS");
+		numbers.printNelems(500);
+		do {
 		searchElement(numbers);n++;
 		}while(n<4);
-		*/
+		
 		numbers.writeFile();
 	}
 	public static void separator() {
