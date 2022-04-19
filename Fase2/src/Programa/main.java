@@ -14,6 +14,7 @@ public class main {
 		//Ciutada prueba1=new Ciutada("Carlos","Martinez","49424598T");
 		
 		
+		
 		Ciutada prueba2=new Ciutada("Carlos","Martinez","49424598J");
 		Ciutada prueba3=new Ciutada("Genis","Martinez","12345678R");
 		Ciutada prueba4=new Ciutada("David","Marti","777239192R");
@@ -100,7 +101,7 @@ public class main {
 				//System.out.println(numbers.findElem(elem));
 				file.write(numbers.findElem(elem)+'\n');
 				file.flush();
-				file.write(numbers.findElem(randomLong())+'\n');
+				file.write(numbers.findElem(randomInt())+'\n');
 				file.flush();
 				
 			}} catch (IOException e) {
@@ -124,7 +125,12 @@ public class main {
 	public static void separator() {
 		System.out.println("**********************************************************");
 	}
-	
+	/**
+	 * Método que se encarga de rellenar la tabla con números aleatorios
+	 * @param has tabla de hash en la que queremos añadir los nElementos 
+	 * @param nElems número de elementos a añadir
+	 * @return lista con los números aleatorios añadidos
+	 */
 	public static long[] generateNumber(HashTable has,Integer nElems) {
 		int nDigits=10;
 		
@@ -135,25 +141,19 @@ public class main {
 		FileWriter escribir=null;
 		long [] array=new long[nElems];
 		
-
-		
-			//escribir=new FileWriter(fileName);
+			
 			for(int i =0;i<nElems;i++) {
-				number=randomLong();
+				number=randomInt();
 				key=has.hashing((long)number);
 				array[i]=number;
-				//System.out.println("1-key= "+key+" n= "+number);
-				//escribir.write("key= "+key+";"+number+'\n');
-				//escribir.flush();
-				//nElems++;
 			}
-			
-		
-		
 		return array;
 	}
-	
-	public static <T> void searchElement(HashTable table) {
+	/**
+	 * Método que se encarga de pedir un elemento y buscarlo en la lista pasada como parámetro
+	 * @param table tabla en la que buscaremos el elemento que se introduzca
+	 */
+	public static void searchElement(HashTable table) {
 		String data=new String();
 		do {
 		System.out.println("Escriu l'element que vulguis buscar: ");
@@ -169,6 +169,11 @@ public class main {
 			System.out.println(table.findElem(data));
 		}while(!data.equalsIgnoreCase("-1"));
 	}
+	/**
+	 * Comprueba si una String es un número
+	 * @param str string a comprobar
+	 * @return true if numeric
+	 */
 	public static boolean isNumeric(String str) { 
 		  try {  
 		    Double.parseDouble(str);  
@@ -177,6 +182,10 @@ public class main {
 		    return false;  
 		  }  
 		}
+	/**
+	 * Genera número long aleatorio
+	 * @return random long
+	 */
 	public static long randomLong() {
 		
 		long leftLimit=1L;
@@ -188,6 +197,21 @@ public class main {
 		}
 		rightLimit=(leftLimit*10)-1;
 		number=leftLimit+(long)(Math.random()*(rightLimit-leftLimit));
+		return number;
+	}
+	/**
+	 * Genera un número entero aleatorio
+	 * @return random int
+	 */
+	public static int randomInt() {
+		int leftLimit=1;
+		int rightLimit;
+		int number;
+		for(int i=0;i<10-1;i++) {
+			leftLimit*=10;
+		}
+		rightLimit=(leftLimit*10)-1;
+		number=leftLimit+(int)(Math.random()*(rightLimit-leftLimit));
 		return number;
 	}
 	

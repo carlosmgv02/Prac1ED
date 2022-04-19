@@ -1,29 +1,39 @@
 package Data;
 import Data.*;
+import Exceptions.ElementoNoEncontrado;
 public class HashElem<T extends Comparable<T>> {
 	int nElems=0;
 	int estado=0;	//0-Empty 1-Deleted 2-Full
 	Nodo firstElem;
 	Nodo lastNode;
+	/**
+	 * Constructor dado un dato a añadir
+	 * @param data
+	 */
 	public HashElem(T data) {
 		firstElem=new Nodo(data);
 		lastNode=firstElem;
 		estado=2;
 		nElems=1;
 	}
-	public HashElem(int nElems,int estado,Nodo firstElem,Nodo lastNode) {
-		this.nElems=nElems;
-		this.estado=estado;
-		this.firstElem=firstElem;
-		this.lastNode=lastNode;
-		
+	/**
+	 * Constructor vacío
+	 */
+	public HashElem() {
+		firstElem=new Nodo();
+		estado=0;
 	}
-	public void addElems() {
-		
-	}
+	/**
+	 * Checks status
+	 * @return 0-Empty 2-Full
+	 */
 	public int getStatus() {
 		return estado;
 	}
+	/**
+	 * Método para añadir una colisión
+	 * @param next elemento siguiente al actual
+	 */
 	public void append(Nodo next) {
 		Nodo last=next;
 		if(nElems==1) {
@@ -33,41 +43,42 @@ public class HashElem<T extends Comparable<T>> {
 		lastNode=lastNode.nextCol;
 		nElems++;
 	}
-	public HashElem() {
-		firstElem=new Nodo();
-		estado=0;
-	}
-	public HashElem copia() {
-		return new HashElem(nElems,estado,firstElem,lastNode);
-	}
+	/**
+	 * Imprime nodo actual y posibles colisiones
+	 */
 	public void print() {
 		Nodo aux=firstElem;
 		while(aux!=null) {
 			System.out.println(aux.data);
 			aux=aux.getNextCol();
 		}
-		
+
 	}
-	
+	/**
+	 * Método para buscar un dato pasado como parámetro
+	 * @param data dato que queremos buscar
+	 * @return 1 if found
+	 */
 	public int lookFor(T data) {
 		boolean found=false;
 		Nodo aux=firstElem;
-		
+		int i=0;
 		while(aux!=null) {
 			if(aux.data instanceof Ciutada) {
 				Ciutada ciu=(Ciutada)aux.data;
 				if(ciu.getDni().equalsIgnoreCase((String)data)&&aux.data!=null) 
 					return 1;
-				
+
 			}
 			else
 				try {
-				if(aux.data.compareTo(data)==0&&aux.data!=null)
-				return 1;}catch(ClassCastException e) {
-					
-				}
+					if(aux.data.compareTo(data)==0&&aux.data!=null)
+						return 1;}catch(ClassCastException e) {
+
+						}
 			aux=aux.nextCol;
+			i++;
 		}
 		return -1;
 	}
-	}
+}

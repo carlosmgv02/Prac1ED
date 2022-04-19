@@ -2,7 +2,7 @@ package Data;
 import java.io.*;
 
 import Programa.main;
-
+import Exceptions.*;
 public class HashTable <T extends Comparable<T>>{
 	int tableSize=10;
 	HashElem[] tablaHash;
@@ -24,6 +24,11 @@ public class HashTable <T extends Comparable<T>>{
 		//System.out.println(tablaHash[1].hashCode());
 
 	}
+	/**
+	 * Método que calcula el hash de los elementos genéricos
+	 * @param data datos del cual queremos obtener el hash
+	 * @return hash
+	 */
 	public int hashKey(T data) {
 		int value=0;
 		String temp=new String();
@@ -88,6 +93,12 @@ public class HashTable <T extends Comparable<T>>{
 		int key=(user.getDni().hashCode()&0x7fffffff);
 		return key;
 	}
+	 */
+	/**
+	 * Método que se encarga de asignar el dato a una posición de la tabla de hash y
+	 * gestionar las colisiones
+	 * @param data dato que queremos situar en la tabla de hash
+	 * @return hash
 	 */
 	public int hashing(T data) {
 
@@ -171,7 +182,13 @@ public class HashTable <T extends Comparable<T>>{
 		return array;
 
 	}
-	//public String[] getAlphaNumericString(int nWords,int n)
+
+	/**
+	 * Método usado para hacer pruebas con strings aleatorias
+	 * @param nWords
+	 * @param n
+	 * @return
+
 	public String[] getAlphaNumericString(int nWords,int n)
 	{
 
@@ -215,7 +232,14 @@ public class HashTable <T extends Comparable<T>>{
 		firstTime=false;
 		return array;
 	}
+	 */
+	/**
+	 * Método usado para buscar un elemento pasado como parámetro
+	 * @param data elemento que queremos buscar
+	 * @return texto que usaremos para guardar en el fichero LogBusqueda e imprimir por pantalla
+	 */
 	public String findElem(T data) {
+		
 		int key=0;
 		if(data instanceof Long)
 			key=hashKey(((Long) data).longValue());
@@ -226,28 +250,21 @@ public class HashTable <T extends Comparable<T>>{
 
 		//System.out.println(key);
 		String text=new String();
-		
+
 		if(tablaHash[key]!=null&&tablaHash[key].lookFor(data)==1) 
 			text="El elemento "+data+" estaba en la posicion "+key;
-			//System.out.println("El elemento "+data+" estaba en la posición "+key);}
+		//System.out.println("El elemento "+data+" estaba en la posición "+key);}
 		else 
 			
 			text="Element "+data+" not found";
-			//System.out.println("Element not found");}
+		//System.out.println("Element not found");}
 		return text;
 	}
-	public void printHash() {
-		int i=0;
-		while(i<tablaHash.length) {
-			try {
-				System.out.println("Posi: "+i+", nElems= "+tablaHash[i].nElems);
-			}catch(NullPointerException e) {
-				System.out.println("Posi: "+i+", nElems=null");
-			}
-			//tablaHash[i].print();
-			i++;
-		}
-	}
+	/**
+	 * Método que genera una string aleatoria de longitud length
+	 * @param length longitud de la string a generar
+	 * @return String generada
+
 	public static String randomString(int length) {
 		StringBuilder sb = new StringBuilder(length);
 		String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -259,7 +276,7 @@ public class HashTable <T extends Comparable<T>>{
 			// 0 to AlphaNumericString variable length
 			int index
 			= (int)(AlphaNumericString.length()
-					* Math.random());
+	 * Math.random());
 
 			// add Character one by one in end of sb
 			sb.append(AlphaNumericString
@@ -268,28 +285,12 @@ public class HashTable <T extends Comparable<T>>{
 		return sb.toString();
 
 	}
-	public int getMin() {
-		for(int i=0;i<tablaHash.length;i++) {
-			try {
-				if(tablaHash[i].nElems<minVal)
-					minVal=tablaHash[i].nElems;
-			}catch(NullPointerException e) {
+	 */
 
-			}
-		}
-		return minVal;
-	}
-
-	public String getOneSentence() {
-		String toReturn=new String();
-		try {
-			toReturn=tablaHash[firstElem].firstElem.data.toString();
-		}catch(NullPointerException e) {
-			System.out.println("No se puede sugerir ningún código porque no"
-					+ "hay elementos añadidos");
-		}
-		return toReturn;
-	}
+	/**
+	 * Método que calcula el factor de carga para saber si hay que redimensionar la tabla de hash
+	 * @return true si hay que redimensionar
+	 */
 	public boolean factorCarga() {
 		//System.out.println("nElems= "+nElems);
 		float res=(float)nElems/tablaHash.length;
@@ -299,6 +300,9 @@ public class HashTable <T extends Comparable<T>>{
 		}
 		return false;
 	}
+	/**
+	 * Método encargado de redimensionar la tabla de hash y recalcular todos los hashes de nuevo
+	 */
 	public void resize() {
 		tableSize*=3;
 		int size=tablaHash.length;
@@ -345,57 +349,36 @@ public class HashTable <T extends Comparable<T>>{
 
 	}
 
-	public void setNelems(int nElems) {
-		this.tableSize=nElems;
-	}
-	public HashElem firstElem() {
-		int i=0;
-		HashElem temp=new HashElem();
-		while(temp==null) {
-			temp=tablaHash[i];
-			i++;
-		}
-		return temp;
-	}
-	/*
-	public void writeFile(int nElems,T sentence,int key,int mode) throws IOException {
-		if(mode==1) {
-			writer=new FileWriter(fileName,true);
-		}
-		else
-			writer=new FileWriter(fileName,true);
-		if(sentence instanceof T)
-			writer.write("key= "+key+";"+sentence+'\n');
-		else if (sentence instanceof Float)
-			writer.write("key= "+key+";"+(Long)sentence+'\n');
-		writer.flush();
-
-	}*/
-
-	public void printNelems() {
+	/**
+	 * Método encargado de imprimir todos los elementos y colisiones de la tabla de hash
+	 */
+	public void printList() {
 		Nodo aux=new Nodo();
 		String toWrite=new String();
 		String fileName=new String("hashing.csv");
 		try {
 			writer=new FileWriter(fileName);
-		
-		if(nElems<tablaHash.length) {
-			for(int i=0;i<tablaHash.length;i++) {
-				if(tablaHash[i]!=null) {
-					aux=tablaHash[i].firstElem;
-					while(aux!=null) {
-						System.out.println("key= "+i+", data= "+aux.data);
-						writer.write("key= "+i+";"+aux.data+'\n');
-						writer.flush();
-						aux=aux.nextCol;
+
+			if(nElems<tablaHash.length) {
+				for(int i=0;i<tablaHash.length;i++) {
+					if(tablaHash[i]!=null) {
+						aux=tablaHash[i].firstElem;
+						while(aux!=null) {
+							System.out.println("key= "+i+", data= "+aux.data);
+							writer.write("key= "+i+";"+aux.data+'\n');
+							writer.flush();
+							aux=aux.nextCol;
+						}
 					}
 				}
 			}
-		}
 		}catch(IOException e) {
 			System.out.println(e.getMessage());
 		}
 	}
+	/**
+	 * NOT USED METHOD TO WRITE A FILE WITH ALL THE VALUES THAT CONTAINS THE HASH TABLE
+	 */
 	public void writeFile () {
 		String fileName=new String();
 		FileWriter escribir=null;
@@ -405,24 +388,17 @@ public class HashTable <T extends Comparable<T>>{
 		try {
 
 			fileName="hashCodes.csv";
-
-
-
 			escribir=new FileWriter(fileName);
 		}catch(IOException e) {
 			System.out.println(e.getMessage());
 		}
 		// TODO Auto-generated catch block
-
-
 		for(int i=0;i<nElems;i++) {
 			try {
 				if(tablaHash[i]!=null) {
 					temp=tablaHash[i].firstElem;
 					while(tablaHash[i].firstElem!=null&&tablaHash[i].firstElem.data!=null&&temp!=null) {
 						if(temp.data instanceof Long||temp.data instanceof Integer) {
-
-
 							try {
 								escribir.write("key= "+i+";"+temp.data+'\n');
 								escribir.flush();
@@ -430,10 +406,8 @@ public class HashTable <T extends Comparable<T>>{
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-
 						}
 						else {
-
 							try {
 								escribir.write("key= "+i+";"+temp.data+'\n');
 								escribir.flush();
@@ -447,11 +421,7 @@ public class HashTable <T extends Comparable<T>>{
 			}catch(NullPointerException e) {
 				System.out.println(e.getMessage());
 			}
-
 		}
-
 	}
-
-
 }
 
