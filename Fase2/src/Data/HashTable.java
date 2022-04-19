@@ -29,8 +29,12 @@ public class HashTable <T extends Comparable<T>>{
 		String temp=new String();
 		if(data instanceof Integer||data instanceof Long)
 			temp=data.toString();
-		else
+		else if(data instanceof String)
 			temp=(String)data;
+		else if(data instanceof Ciutada) {
+			Ciutada ciud=(Ciutada)data;
+			temp=ciud.getDni();
+		}
 		int i=0;
 		while(i<temp.length()) {
 			value=(value*3+(int)(temp.charAt(i)))%tableSize;
@@ -44,15 +48,15 @@ public class HashTable <T extends Comparable<T>>{
 	 * @return hash key
 	 */
 	public int hashKey(long data) {
-		int value=0;
+		/*int value=0;
 		long temp=data;
 		int i=5;
 		while(temp>0) {
 			value+=(temp%10)*i;
 			temp=temp/10;
 			i++;
-		}
-		return (value%tableSize);
+		}*/
+		return (int) (data%tableSize);
 	}
 	/**
 	 * Method used to assign the integer to a position of the hashTable
@@ -89,7 +93,14 @@ public class HashTable <T extends Comparable<T>>{
 
 
 		int value=0;
-		value=hashKey(data);
+		if(data instanceof Long) {
+			value=hashKey((Long)data);
+		}
+		else if(data instanceof Integer) {
+			value=hashKey((Integer)data);
+		}
+		else 
+			value=hashKey(data);
 		if(tablaHash[value]==null) {
 			tablaHash[value]=new HashElem();
 		}
@@ -204,7 +215,7 @@ public class HashTable <T extends Comparable<T>>{
 		firstTime=false;
 		return array;
 	}
-	public int findElem(T data) {
+	public String findElem(T data) {
 		int key=0;
 		if(data instanceof Long)
 			key=hashKey(((Long) data).longValue());
@@ -214,12 +225,16 @@ public class HashTable <T extends Comparable<T>>{
 
 
 		//System.out.println(key);
-
-		if(tablaHash[key]!=null&&tablaHash[key].lookFor(data)==1)
-			System.out.println("El elemento "+data+" estaba en la posición "+key);
-		else
-			System.out.println("Element not found");
-		return posi;
+		String text=new String();
+		
+		if(tablaHash[key]!=null&&tablaHash[key].lookFor(data)==1) 
+			text="El elemento "+data+" estaba en la posicion "+key;
+			//System.out.println("El elemento "+data+" estaba en la posición "+key);}
+		else 
+			
+			text="Element "+data+" not found";
+			//System.out.println("Element not found");}
+		return text;
 	}
 	public void printHash() {
 		int i=0;
@@ -302,7 +317,7 @@ public class HashTable <T extends Comparable<T>>{
 				Nodo temp=aux[j].firstElem;
 				while(aux[j].firstElem!=null&&aux[j].firstElem.data!=null&&temp!=null) {
 					if(temp!=null&&temp.data instanceof Long) {
-						System.out.println(temp.data);
+						//System.out.println(temp.data);
 						key=hashing((Long) temp.data);
 
 						/*try {
@@ -357,15 +372,15 @@ public class HashTable <T extends Comparable<T>>{
 
 	}*/
 
-	public void printNelems(int nElems) {
+	public void printNelems() {
 		Nodo aux=new Nodo();
 		String toWrite=new String();
-		String fileName=new String("hsahing.csv");
+		String fileName=new String("hashing.csv");
 		try {
 			writer=new FileWriter(fileName);
 		
 		if(nElems<tablaHash.length) {
-			for(int i=nElems;i<tablaHash.length;i++) {
+			for(int i=0;i<tablaHash.length;i++) {
 				if(tablaHash[i]!=null) {
 					aux=tablaHash[i].firstElem;
 					while(aux!=null) {

@@ -8,21 +8,34 @@ import java.util.Scanner;
 
 import Data.*;
 public class main {
+	public static FileWriter file;
 	public static Scanner scan;
 	public static <T extends Comparable<T>>void main(String[] args)throws InterruptedException, IOException  {
 		//Ciutada prueba1=new Ciutada("Carlos","Martinez","49424598T");
 		
+		
 		Ciutada prueba2=new Ciutada("Carlos","Martinez","49424598J");
+		Ciutada prueba3=new Ciutada("Genis","Martinez","12345678R");
+		Ciutada prueba4=new Ciutada("David","Marti","777239192R");
+		Ciutada prueba5=new Ciutada("Markote11","riosalido","487237842Q");
+		
 		String prueba1=new String("carlos");
 		
 		//System.out.println(prueba2.hashCode());
 		// PROGRAMA PRINCIPAL PART HASHINGS
 		
 		mostrarMenu();
+		HashTable lista=new HashTable();
+		generateNumber(lista,100);
+		int n=lista.hashing(prueba2);
+		 n=lista.hashing(prueba3);
+		n=lista.hashing(prueba4);
+		n=lista.hashing(prueba5);
+		//prueba.printNelems();
+		lista.resize();
+		//prueba.printNelems();
 		
-		HashTable prueba=new HashTable();
-		generateNumber(prueba,15);
-		prueba.resize();
+		searchElement(lista);
 		int[]numeros= {1,2,3,4};
 		//prueba.writeFile(numeros, 4);
 		/*prueba.getAlphaNumericString(10, 5);
@@ -52,7 +65,8 @@ public class main {
 		System.out.println("3- Insertar 100/1.000/10.000 String a la taula de hash");
 		System.out.println("4- Buscarem alguns elements que existeixin i uns altres que no");
 		System.out.println("COMENCEM...\n");
-		//t.sleep(3500);
+		t.sleep(3500);
+		
 		HashTable strings;
 		HashTable numbers;
 		int nElems=100;
@@ -66,11 +80,6 @@ public class main {
 			//We add the strings to the string array called 'sentence'
 			separator();
 			//System.out.println(i);
-			initTime=System.nanoTime();
-			sentence=strings.getAlphaNumericString(nElems, 15);	//15 is the length of the string
-			endTime=System.nanoTime();	
-			duration=(endTime-initTime);
-			System.out.println("\tAfegir les "+ nElems+" strings ha trigat "+duration+" ns");
 			
 			//We add the long numbers to the long array called 'digits'
 			initTime=System.nanoTime();
@@ -81,81 +90,84 @@ public class main {
 			System.out.println("\tAfegir els "+nElems+" longs ha trigat "+duration+" ns");
 			
 			//Trying to find some elements that don't exist and some other that do
+			try {
+				file=new FileWriter("LogBusqueda.txt");
 			
 			for(int j=0;j<nElems/5;j++) {
-				String elem=sentence[j*2];
+				long elem=digits[j*2];
 				//System.out.println("posi :"+j*2+" elem");
-				//strings.findElem(sentence[j*2]);
+				//numbers.findElem(elem);
+				//System.out.println(numbers.findElem(elem));
+				file.write(numbers.findElem(elem)+'\n');
+				file.flush();
+				file.write(numbers.findElem(randomLong())+'\n');
+				file.flush();
 				
+			}} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			//t.sleep(1500);
 			nElems*=10;i++;
 		}while(nElems<100000);
 		
 		int n=0;
-		System.out.println("NUMBERS");
-		numbers.printNelems(500);
+		System.out.println("Pots utilitzar el fitxer hashCodes.csv per a fer proves");
+		//numbers.printNelems();
+		numbers.writeFile();
+		System.out.println("Escriu -1 per a sortir del programa");
 		do {
 		searchElement(numbers);n++;
 		}while(n<4);
 		
-		numbers.writeFile();
 	}
 	public static void separator() {
 		System.out.println("**********************************************************");
 	}
+	
 	public static long[] generateNumber(HashTable has,Integer nElems) {
-		long nDigits=15L;
-		long leftLimit=1L;
-		long rightLimit;
+		int nDigits=10;
+		
 		long number;int key;
 		String fileName=new String();
 		
 		fileName=nElems.toString().concat("numbers.csv");
 		FileWriter escribir=null;
 		long [] array=new long[nElems];
-		for(int i=0;i<nDigits-1;i++) {
-			leftLimit*=10;
+		
 
-		}
-		rightLimit=(leftLimit*10)-1;
-		try{
-			escribir=new FileWriter(fileName);
+		
+			//escribir=new FileWriter(fileName);
 			for(int i =0;i<nElems;i++) {
-				number=leftLimit+(long)(Math.random()*(rightLimit-leftLimit));
-				key=has.hashing(number);
+				number=randomLong();
+				key=has.hashing((long)number);
 				array[i]=number;
 				//System.out.println("1-key= "+key+" n= "+number);
-				escribir.write("key= "+key+";"+number+'\n');
-				escribir.flush();
+				//escribir.write("key= "+key+";"+number+'\n');
+				//escribir.flush();
 				//nElems++;
 			}
-		}catch(IOException e) {
-			System.out.println("file not found");
-		}
-		try {
-			System.out.println("-Valors guardats correctament al fitxer '"+fileName+"'");
-			escribir.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			
+		
+		
 		return array;
 	}
-	public void generateString(int nElems) {
-		
-	}
+	
 	public static <T> void searchElement(HashTable table) {
-		
-		System.out.println("Escribe el elemento que quieras ");
+		String data=new String();
+		do {
+		System.out.println("Escriu l'element que vulguis buscar: ");
 		scan=new Scanner(System.in);
-		String data=scan.next();
+		 data=scan.next();
 		
 		if(isNumeric(data)) {
-			table.findElem(Long.parseLong(data));
+			if(data.equalsIgnoreCase("-1"))System.exit(0);;
+			System.out.println(table.findElem(Long.parseLong(data)));
+			
 		}
 		else
-			table.findElem(data);
+			System.out.println(table.findElem(data));
+		}while(!data.equalsIgnoreCase("-1"));
 	}
 	public static boolean isNumeric(String str) { 
 		  try {  
@@ -165,5 +177,18 @@ public class main {
 		    return false;  
 		  }  
 		}
+	public static long randomLong() {
+		
+		long leftLimit=1L;
+		long rightLimit;
+		long number;
+		for(int i=0;i<10-1;i++) {
+			leftLimit*=10;
+
+		}
+		rightLimit=(leftLimit*10)-1;
+		number=leftLimit+(long)(Math.random()*(rightLimit-leftLimit));
+		return number;
+	}
 	
 }

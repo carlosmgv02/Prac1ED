@@ -52,9 +52,20 @@ public class HashElem<T extends Comparable<T>> {
 	public int lookFor(T data) {
 		boolean found=false;
 		Nodo aux=firstElem;
+		
 		while(aux!=null) {
-			if(aux.data.compareTo(data)==0&&aux.data!=null)
-				return 1;
+			if(aux.data instanceof Ciutada) {
+				Ciutada ciu=(Ciutada)aux.data;
+				if(ciu.getDni().equalsIgnoreCase((String)data)&&aux.data!=null) 
+					return 1;
+				
+			}
+			else
+				try {
+				if(aux.data.compareTo(data)==0&&aux.data!=null)
+				return 1;}catch(ClassCastException e) {
+					
+				}
 			aux=aux.nextCol;
 		}
 		return -1;
