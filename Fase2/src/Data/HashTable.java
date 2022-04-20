@@ -8,20 +8,16 @@ public class HashTable <T extends Comparable<T>>{
 	HashElem[] tablaHash;
 	String fileName;
 	int firstElem;
-	int minVal=300;
 	int counter;
-	int leastEl=0;
 	int nElems;
 	boolean firstTime=true;
 	FileWriter writer;
 
+	/**
+	 * Constructor principal de la clase HashTable
+	 */
 	public HashTable() {
-
 		tablaHash=new HashElem[tableSize];
-		for(int x=0;x<tablaHash.length;x++) {
-			//tablaHash[x]=new HashElem();
-		}
-		//System.out.println(tablaHash[1].hashCode());
 
 	}
 	/**
@@ -54,14 +50,6 @@ public class HashTable <T extends Comparable<T>>{
 	 * @return hash key
 	 */
 	public int hashKey(long data) {
-		/*int value=0;
-		long temp=data;
-		int i=5;
-		while(temp>0) {
-			value+=(temp%10)*i;
-			temp=temp/10;
-			i++;
-		}*/
 		return (int) (data%tableSize);
 	}
 	/**
@@ -245,7 +233,7 @@ public class HashTable <T extends Comparable<T>>{
 		if(data instanceof Integer) {
 			key=hashKey((Integer)data);
 		}
-		if(data instanceof Long)
+		else if(data instanceof Long)
 			key=hashKey(((Long) data).longValue());
 		else if(data instanceof T)
 			key=hashKey(data);
@@ -324,25 +312,10 @@ public class HashTable <T extends Comparable<T>>{
 					if(temp!=null&&temp.data instanceof Long) {
 						//System.out.println(temp.data);
 						key=hashing((Long) temp.data);
-
-						/*try {
-						writeFile(nElems,(T)temp.data,key,mode);
-						mode=2;
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}*/
 					}
 					else {
 						key=hashing((T)temp.data);
-						/*try {
-						writeFile(nElems,(T)temp.data,key,mode);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}*/
 					}
-					//System.out.println("2- key= "+key+" n= "+temp.data);
 					temp=temp.nextCol;
 				}
 			}

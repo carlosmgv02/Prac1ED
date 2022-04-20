@@ -13,17 +13,20 @@ public class main {
 	public static Scanner scan;
 	public static <T extends Comparable<T>>void main(String[] args)throws InterruptedException, IOException  {
 		// PROGRAMA PRINCIPAL PART HASHINGS
-		HashTable tabla=new HashTable();
-		
-		mostrarMenu();	
+		mostrarMenu();
+		for(int i=0;i<15;i++) {
+			System.out.println("Int: "+randomInt());
+			System.out.println("Long: "+randomLong());
+		}
 	}
 	
 	
 	public static void mostrarMenu() throws InterruptedException, IOException{
 		Thread t=Thread.currentThread();
-		Long[]duration=new Long[4];
+		Long[]duration=new Long[5000];
 		long initTime;
 		long endTime;
+		String print=new String();
 		FileWriter search=null;
 		//long duration;
 		try {
@@ -42,17 +45,16 @@ public class main {
 		System.out.println("3- Insertar 100/1.000/10.000 String a la taula de hash");
 		System.out.println("4- Buscarem alguns elements que existeixin i uns altres que no");
 		System.out.println("COMENCEM...\n");
-		t.sleep(3500);
+		//t.sleep(3500);
 		
 		
-		HashTable numbers;
 		int nElems=100;
+		HashTable numbers=null;
 		int[]digits;
 		int i=0;
 		do {
 			
 			numbers=new HashTable();
-			
 			//We add the strings to the string array called 'sentence'
 			separator();
 			
@@ -65,7 +67,7 @@ public class main {
 			
 			duration[i]=(endTime-initTime);
 			System.out.println("\tAfegir els "+nElems+" "+digits.getClass().getSimpleName()+ "  ha trigat "+duration[i]+" ns");
-			writeFile("CostesTemporales.csv",nElems,duration[i],duration);
+			
 			//Trying to find some elements that don't exist and some other that do
 			try {
 				
@@ -73,12 +75,16 @@ public class main {
 				search=new FileWriter("LogBusqueda.txt");
 			
 			for(int j=0;j<nElems/5;j++) {
-				long elem=digits[j*2];
-				
-				search.write(numbers.findElem(elem)+'\n');
+				int elem=digits[j*2];
+				initTime=System.nanoTime();
+				print=numbers.findElem(elem);
+				endTime=System.nanoTime();
+				duration[i]=(endTime-initTime);
+				search.write(print+'\n');
 				search.flush();
 				search.write(numbers.findElem(randomInt())+'\n');
 				search.flush();
+				writeFile("CostesTemporales.csv",nElems,duration[i],duration);
 				
 			}} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -146,7 +152,8 @@ public class main {
 		do {
 		System.out.println("Escriu l'element que vulguis buscar: ");
 		scan=new Scanner(System.in);
-		 data=scan.next();
+		try { 
+		data=scan.next();
 		
 		if(isNumeric(data)) {
 			if(data.equalsIgnoreCase("-1"))System.exit(0);;
@@ -155,7 +162,11 @@ public class main {
 		}
 		else
 			System.out.println(table.findElem(data));
+		}catch(NumberFormatException e){
+			System.out.println("EL número introduit no és vàlid");
+		}
 		}while(!data.equalsIgnoreCase("-1"));
+		
 	}
 	public static void writeFile(String fileName,int listLength,long duration,Long[]soFar) {
 		//FileWriter file=null;
