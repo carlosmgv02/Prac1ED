@@ -40,6 +40,7 @@ public class HashTable <T extends Comparable<T>>{
 			Ciutada ciud=(Ciutada)data;
 			temp=ciud.getDni();
 		}
+		else return (data.hashCode()&0x7fffffff)%tableSize;
 		int i=0;
 		while(i<temp.length()) {
 			value=(value*3+(int)(temp.charAt(i)))%tableSize;
@@ -241,16 +242,16 @@ public class HashTable <T extends Comparable<T>>{
 	public String findElem(T data) {
 		
 		int key=0;
+		if(data instanceof Integer) {
+			key=hashKey((Integer)data);
+		}
 		if(data instanceof Long)
 			key=hashKey(((Long) data).longValue());
 		else if(data instanceof T)
 			key=hashKey(data);
 		int posi=0;
-
-
 		//System.out.println(key);
 		String text=new String();
-
 		if(tablaHash[key]!=null&&tablaHash[key].lookFor(data)==1) 
 			text="El elemento "+data+" estaba en la posicion "+key;
 		//System.out.println("El elemento "+data+" estaba en la posición "+key);}
