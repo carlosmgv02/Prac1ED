@@ -18,7 +18,7 @@ public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Itera
 		int i=0;
 		//inicio=new Nodo(null);
 		this.nElems++;
-		/*
+		
 		Nodo<T>nodoAux=inicio;
 		while(i<nElems-1) {
 			nodoAux.siguiente=new Nodo(i);
@@ -26,7 +26,7 @@ public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Itera
 			nodoAux=nodoAux.siguiente;
 			this.nElems++;i++;
 
-		}*/
+		}
 	}
 	
 	/**

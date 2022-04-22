@@ -227,8 +227,8 @@ public class HashTable <T extends Comparable<T>>{
 	 * @param data elemento que queremos buscar
 	 * @return texto que usaremos para guardar en el fichero LogBusqueda e imprimir por pantalla
 	 */
-	public String findElem(T data) {
-		
+	public int findElem(T data) {
+		int iterations=0;
 		int key=0;
 		if(data instanceof Integer) {
 			key=hashKey((Integer)data);
@@ -237,17 +237,24 @@ public class HashTable <T extends Comparable<T>>{
 			key=hashKey(((Long) data).longValue());
 		else if(data instanceof T)
 			key=hashKey(data);
+		else key=(data.hashCode()&0x7fffffff)%tableSize;
 		int posi=0;
-		//System.out.println(key);
 		String text=new String();
-		if(tablaHash[key]!=null&&tablaHash[key].lookFor(data)==1) 
-			text="El elemento "+data+" estaba en la posicion "+key;
+		if(tablaHash[key]!=null) {
+		try {
+			iterations=tablaHash[key].lookFor(data);
+			return iterations;
+		}catch(NullPointerException e) {
+			System.out.println(e.getMessage());
+		}
+		}
 		//System.out.println("El elemento "+data+" estaba en la posición "+key);}
-		else 
-			
-			text="Element "+data+" not found";
-		//System.out.println("Element not found");}
-		return text;
+		else {
+			//System.out.println("Element not found");
+			return -1;
+		}
+		
+		return iterations;
 	}
 	/**
 	 * Método que genera una string aleatoria de longitud length

@@ -38,15 +38,17 @@ public class main {
 	
 	public static void mostrarMenu() throws InterruptedException, IOException{
 		Thread t=Thread.currentThread();
-		Long[]duration=new Long[5000];
+		long duration=0L;
+		
 		long initTime;
 		long endTime;
 		String print=new String();
+		Long []searchElems;
 		FileWriter search=null;
 		//long duration;
 		try {
-			file=new FileWriter("CostesTemporales.csv");
-			file.write("LIST SIZE;TIME TAKEN;STDEV\n");
+			file=new FileWriter("CosteComputacional.csv");
+			file.write("LIST SIZE;N SEARCHES;STDEV\n");
 			file.flush();
 			//file.close();
 		}catch(IOException e) {
@@ -60,7 +62,7 @@ public class main {
 		System.out.println("3- Insertar 100/1.000/10.000 String a la taula de hash");
 		System.out.println("4- Buscarem alguns elements que existeixin i uns altres que no");
 		System.out.println("COMENCEM...\n");
-		t.sleep(3500);
+		//t.sleep(3500);
 		
 		
 		int nElems=100;
@@ -80,26 +82,36 @@ public class main {
 			//numbers.printHash();
 			endTime=System.nanoTime();
 			
-			duration[i]=(endTime-initTime);
-			System.out.println("\tAfegir els "+nElems+" "+digits.getClass().getSimpleName()+ "  ha trigat "+duration[i]+" ns");
+			duration=(endTime-initTime);
+			System.out.println("\tAfegir els "+nElems+" "+digits.getClass().getSimpleName()+ "  ha trigat "+duration+" ns");
 			
 			//Trying to find some elements that don't exist and some other that do
 			try {
-				
 				//Escribimos en un fichero los elementos que encuentra y los que no, para poder visualizarlo más comodamente
 				search=new FileWriter("LogBusqueda.txt");
-			
+			searchElems=new Long[nElems/5];
 			for(int j=0;j<nElems/5;j++) {
 				int elem=digits[j*2];
 				initTime=System.nanoTime();
-				print=numbers.findElem(elem);
+				searchElems[j]=Long.valueOf(numbers.findElem(elem));
+				if(searchElems[j]==-1) {
+					//System.out.println("yep");
+					print="Element "+elem+" not found";
+				}
+				else
+					print=searchElems[j]+" iterations 'till element found";
 				endTime=System.nanoTime();
-				duration[i]=(endTime-initTime);
+				duration=(endTime-initTime);
 				search.write(print+'\n');
 				search.flush();
-				search.write(numbers.findElem(randomInt())+'\n');
+				int iter=numbers.findElem(randomInt());
+				if(iter==-1)
+					print="Element "+elem+" not found";
+				else
+					print=iter+" iterations 'till element found";
+				search.write(print+'\n');
 				search.flush();
-				writeFile("CostesTemporales.csv",nElems,duration[i],duration);
+				writeFile("CosteComputacional.csv",nElems,searchElems[i],searchElems);
 				
 			}} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -119,8 +131,8 @@ public class main {
 		}while(n<4);
 		//costes.close();
 	}
-	public static Double stDev(Long[]nums) {
-		Double stDev=0.0,sum=0.0;
+	public static double stDev(Long[]nums) {
+		double stDev=0.0,sum=0.0;
 		for(int i=0;i<nums.length&&nums[i]!=null;i++) {
 			sum+=nums[i];
 		}
@@ -128,6 +140,8 @@ public class main {
 		for(int j=0;j<nums.length&&nums[j]!=null;j++) {
 			stDev+=Math.pow(nums[j]-media, 2);
 		}
+		 double sq = stDev / nums.length;
+	        stDev = Math.sqrt(sq);
 		return stDev;
 	}
 	
@@ -183,11 +197,11 @@ public class main {
 		}while(!data.equalsIgnoreCase("-1"));
 		
 	}
-	public static void writeFile(String fileName,int listLength,long duration,Long[]soFar) {
+	public static void writeFile(String fileName,int listLength,Long accesos,Long[]soFar) {
 		//FileWriter file=null;
-		double secs=(double)duration/1000000000.0;
+		//double secs=(double)accesos/1000000000.0;
 		try {
-			file.write(listLength+";"+secs+"s;"+stDev(soFar)+"\n");
+			file.write(listLength+";"+accesos+";"+stDev(soFar)+"\n");
 			
 				file.flush();
 		} catch (IOException e) {
