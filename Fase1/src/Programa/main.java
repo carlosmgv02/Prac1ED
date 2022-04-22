@@ -106,7 +106,7 @@ public class main {
 		 */
 		case 6:
 			int toDelete=0;
-			int length=0;
+			int length=llista.Longitud();
 			System.out.println("Introdueix l'index de la posició que vols eliminar");
 			try {
 			toDelete=scan.nextInt();

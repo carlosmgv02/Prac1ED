@@ -16,8 +16,9 @@ public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Itera
 	 */
 	public ListaDoble(int nElems) {
 		int i=0;
-		inicio=new Nodo(null);
+		//inicio=new Nodo(null);
 		this.nElems++;
+		/*
 		Nodo<T>nodoAux=inicio;
 		while(i<nElems-1) {
 			nodoAux.siguiente=new Nodo(i);
@@ -25,8 +26,9 @@ public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Itera
 			nodoAux=nodoAux.siguiente;
 			this.nElems++;i++;
 
-		}
+		}*/
 	}
+	
 	/**
 	 * Inicialització del primer element de la llista encadenada
 	 */
@@ -134,7 +136,7 @@ public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Itera
 	 * @param posi: índex de l'element que es vol esborrar
 	 */
 	public void Esborrar(int posi) {
-		if(posi>0 && posi<nElems) {
+		if(posi>=0 && posi<nElems) {
 			Nodo aux=inicio;
 			int i;
 			for(i=1;aux!=null&&i<posi;i++) {

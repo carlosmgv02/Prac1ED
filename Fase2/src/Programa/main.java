@@ -13,10 +13,25 @@ public class main {
 	public static Scanner scan;
 	public static <T extends Comparable<T>>void main(String[] args)throws InterruptedException, IOException  {
 		// PROGRAMA PRINCIPAL PART HASHINGS
-		mostrarMenu();
-		for(int i=0;i<15;i++) {
-			System.out.println("Int: "+randomInt());
-			System.out.println("Long: "+randomLong());
+		int opcio=1;	//1-Ints(default)	2-Ciutadans
+		switch(opcio) {
+		case 1:
+			//Comprovació utilitzant ints
+			mostrarMenu();
+			break;
+		case 2:
+			//Comprovació utilitzant Ciutadans
+			HashTable tab=new HashTable();
+			Ciutada ciudadano=new Ciutada("Carlos","Martínez","49424598J");
+			Ciutada ciudadano2=new Ciutada("Genis","Martínez","49422343K");
+			Ciutada ciudadano3=new Ciutada("David","Martí","77726323A");
+			Ciutada ciudadano4=new Ciutada("Albert","Solé","49424598Z");
+			tab.hashing(ciudadano);
+			tab.hashing(ciudadano2);
+			tab.hashing(ciudadano3);
+			tab.hashing(ciudadano4);
+			searchElement(tab);
+			break;
 		}
 	}
 	
@@ -45,7 +60,7 @@ public class main {
 		System.out.println("3- Insertar 100/1.000/10.000 String a la taula de hash");
 		System.out.println("4- Buscarem alguns elements que existeixin i uns altres que no");
 		System.out.println("COMENCEM...\n");
-		//t.sleep(3500);
+		t.sleep(3500);
 		
 		
 		int nElems=100;
