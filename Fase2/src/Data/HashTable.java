@@ -20,6 +20,7 @@ public class HashTable <T extends Comparable<T>>{
 		tablaHash=new HashElem[tableSize];
 
 	}
+
 	/**
 	 * Método que calcula el hash de los elementos genéricos
 	 * @param data datos del cual queremos obtener el hash
@@ -27,7 +28,7 @@ public class HashTable <T extends Comparable<T>>{
 	 */
 	public int hashKey(T data) {
 		int value=0;
-		String temp=new String();
+		String temp;
 		if(data instanceof Integer||data instanceof Long)
 			temp=data.toString();
 		else if(data instanceof String)
@@ -112,7 +113,7 @@ public class HashTable <T extends Comparable<T>>{
 				resize();
 		}
 		else if(tablaHash[value].estado==2) {
-			int val=0;     
+
 			//System.out.println("OCUPADO");
 			counter++;
 			//nElems++;
@@ -235,7 +236,7 @@ public class HashTable <T extends Comparable<T>>{
 		}
 		else if(data instanceof Long)
 			key=hashKey(((Long) data).longValue());
-		else if(data instanceof T)
+		else if(data != null)
 			key=hashKey(data);
 		else key=(data.hashCode()&0x7fffffff)%tableSize;
 		int posi=0;
