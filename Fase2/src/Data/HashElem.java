@@ -1,8 +1,11 @@
 package Data;
 import Data.*;
 import Exceptions.ElementoNoEncontrado;
-public class HashElem<T extends Comparable<T>> {
+public class HashElem<K,T extends Comparable<T>> {
 	int nElems=0;
+	public K key;
+	public final int hash;
+	T data;
 	int estado=0;	//0-Empty 1-Deleted 2-Full
 	Nodo firstElem;
 	Nodo lastNode;
@@ -15,6 +18,11 @@ public class HashElem<T extends Comparable<T>> {
 		lastNode=firstElem;
 		estado=2;
 		nElems=1;
+	}
+	public HashElem(K key,T data,int hash){
+		this.key=key;
+		this.firstElem=new Nodo(data);
+		this.hash=hash;
 	}
 	/**
 	 * Constructor vacío

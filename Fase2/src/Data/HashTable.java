@@ -1,9 +1,11 @@
 package Data;
 import java.io.*;
+import java.math.BigInteger;
+import java.util.Objects;
 
 import Programa.main;
 import Exceptions.*;
-public class HashTable <T extends Comparable<T>>{
+public class HashTable <K,T extends Comparable<T>>{
 	int tableSize=10;
 	HashElem[] tablaHash;
 	String fileName;
@@ -20,12 +22,25 @@ public class HashTable <T extends Comparable<T>>{
 		tablaHash=new HashElem[tableSize];
 
 	}
+	public int hash(K key){
+		return Objects.hash(key);
+	}
+	public int hashKey(K key) {
+		int hashCode= hash(key);
+		int index=hashCode%tablaHash.length;
+		index=index < 0 ? index*-1:index;
+		return index;
+	}
+	public boolean existe(K key){
+		int code=hash(key);
 
+	}
 	/**
 	 * Método que calcula el hash de los elementos genéricos
 	 * @param data datos del cual queremos obtener el hash
 	 * @return hash
 	 */
+	/*
 	public int hashKey(T data) {
 		int value=0;
 		String temp;
@@ -44,7 +59,8 @@ public class HashTable <T extends Comparable<T>>{
 			i++;
 		}
 		return value;
-	}
+	}*/
+
 	/**
 	 * Returns hashKey for a long number in a range 0-tablaHash.length
 	 * @param data number from which we want to get the hash
@@ -84,6 +100,16 @@ public class HashTable <T extends Comparable<T>>{
 		return key;
 	}
 	 */
+	public void Inserir(K key,T data){
+		int index=hashKey(key);
+		int hashCode=hash(key);
+		HashElem<T>head=tablaHash[index];
+		while(head!=null){
+			if(head.key.equals(key)&&head.hash==hashCode){
+				head.
+			}
+		}
+	}
 	/**
 	 * Método que se encarga de asignar el dato a una posición de la tabla de hash y
 	 * gestionar las colisiones
@@ -125,6 +151,9 @@ public class HashTable <T extends Comparable<T>>{
 
 		return value;
 	}
+	public boolean conte(K elem){
+
+	}
 	/**
 	 * Method used to generate random long values given an upper limit
 	 * @param nNumbers amount of numbers to generate
@@ -145,6 +174,8 @@ public class HashTable <T extends Comparable<T>>{
 		}
 		rightLimit=(leftLimit*10)-1;
 		try{
+
+
 			if(firstTime)
 				escribir=new FileWriter(fileName);
 			else

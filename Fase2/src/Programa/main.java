@@ -5,15 +5,37 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.Thread;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Objects;
 import java.util.Scanner;
 
 import Data.*;
+class prueba<T>{
+	int num1,num2;
+	public <T>prueba(T data){
+		System.out.println("El número es: "+data.toString());
+		String str=new String();
+		System.out.println(Objects.hashCode(12));
+	}
+
+}
 public class main {
 	public static FileWriter file;
 	public static Scanner scan;
 	public static <T extends Comparable<T>>void main(String[] args)throws InterruptedException, IOException  {
 		// PROGRAMA PRINCIPAL PART HASHINGS
-		int opcio=1;	//1-Ints(default)	2-Ciutadans
+		int opcio=1;
+		Nodo nodo1=new Nodo(12);
+		Nodo nodo2=new Nodo(12);
+		System.out.println("hash1= "+Objects.hashCode(nodo1)+" hash2= "+Objects.hashCode(nodo2));
+		ListaDoble<Integer>lista=new ListaDoble<>();
+		lista.Inserir(123);
+		lista.Inserir(12312);
+		lista.Inserir(989534);
+		lista.Inserir(5123);
+		lista.Inserir(7564);
+
+
 		switch(opcio) {
 		case 1:
 			//Comprovació utilitzant ints
