@@ -5,9 +5,9 @@ import java.util.Objects;
 
 import Programa.main;
 import Exceptions.*;
-public class HashTable <K,T extends Comparable<T>>{
+public class HashTable <K,T extends Comparable<T>>implements TADTaulaHash<K,T>{
 	int tableSize=10;
-	HashElem[] tablaHash;
+	Nodo<K,T>[] tablaHash;
 	String fileName;
 	int firstElem;
 	int counter;
@@ -15,26 +15,90 @@ public class HashTable <K,T extends Comparable<T>>{
 	boolean firstTime=true;
 	FileWriter writer;
 
-	/**
+	/*
 	 * Constructor principal de la clase HashTable
 	 */
 	public HashTable() {
-		tablaHash=new HashElem[tableSize];
+		tablaHash=new Nodo[tableSize];
 
+	}
+	public int getIndex(K key){
+		return hash(key)%tablaHash.length;
 	}
 	public int hash(K key){
-		return Objects.hash(key);
+		String str=key.toString();
+		int power;
+		int hash=0;
+		for(int i=0;i<str.length();i++){
+			power= (int) Math.pow(2,i);
+			hash+=((int)str.charAt(i))*power;
+
+		}
+		hash=hash < 0 ? hash * -1 : hash;
+		return hash;
 	}
-	public int hashKey(K key) {
-		int hashCode= hash(key);
-		int index=hashCode%tablaHash.length;
-		index=index < 0 ? index*-1:index;
-		return index;
+	public int hashKey(K key){
+		String str=key.toString();
+		int res=0;
+		for(int i=0;i<str.length();i++){
+			res=(res*32+(int)str.charAt(i))% tablaHash.length;
+		}
+		return res;
 	}
-	public boolean existe(K key){
-		int code=hash(key);
+	@Override
+	public void Crear() {
+		tablaHash=new Nodo[tableSize];
+	}
+
+	@Override
+	public void Inserir(K key, T data) {
+		if(factorCarga()>=0.75)
+			resize();
+		int hash=hash(key);
+		int index=hash% tablaHash.length;
+		if(tablaHash[index]==null){
+			tablaHash[index]=new Nodo(key,data,hash);
+
+		}
+		else{
+			tablaHash[index].add(key,data,hash);
+		}
+		nElems++;
+	}
+
+	@Override
+	public T Obtenir(K key) {
+		return null;
+	}
+
+	@Override
+	public int Buscar(K key) throws ElementoNoEncontrado{
+		int hash=hash(key);
+		int index=hash%tableSize;
+		int c=0;
+		Nodo<K,T>temp=tablaHash[index];
+		if(temp!=null){
+			while(temp!=null){
+				if(temp.hash==hash)return c;
+				temp=temp.nextCol;
+				c++;
+			}
+
+		}
+		throw new ElementoNoEncontrado(c);
+	}
+
+	@Override
+	public int Mida() {
+		return 0;
+	}
+
+	@Override
+	public void Esborrar(K key) {
 
 	}
+
+
 	/**
 	 * Método que calcula el hash de los elementos genéricos
 	 * @param data datos del cual queremos obtener el hash
@@ -76,22 +140,22 @@ public class HashTable <K,T extends Comparable<T>>{
 	 */
 
 	int hashing(long data) {
-		int value=hashKey(data);
-		if(tablaHash[value]==null) {
-			tablaHash[value]=new HashElem();}
-		if(tablaHash[value].estado!=2) {
-			tablaHash[value]=new HashElem(data);
-			firstElem=value;
-			nElems++;
-			if(factorCarga())
-				resize();
+		int value = hashKey(data);
+		if (tablaHash[value] == null) {
+			//tablaHash[value]=new Nodo(data,value);}
+			if (tablaHash[value] == null) {
+				//tablaHash[value]=new Nodo(data,value);
+				firstElem = value;
+				nElems++;
+				if (factorCarga() >= 0.75)
+					resize();
+			} else if (tablaHash[value] != null) {
+				counter++;
+				//tablaHash[value].add(data,value);
+				//nElems++;
+			}
 		}
-		else if (tablaHash[value].estado==2) {
-			counter++;
-			tablaHash[value].append(new Nodo(data));
-			//nElems++;
-		}
-		return value;
+			return value;
 	}
 	/*
 	int hashing(Ciutada user) {
@@ -100,16 +164,7 @@ public class HashTable <K,T extends Comparable<T>>{
 		return key;
 	}
 	 */
-	public void Inserir(K key,T data){
-		int index=hashKey(key);
-		int hashCode=hash(key);
-		HashElem<T>head=tablaHash[index];
-		while(head!=null){
-			if(head.key.equals(key)&&head.hash==hashCode){
-				head.
-			}
-		}
-	}
+
 	/**
 	 * Método que se encarga de asignar el dato a una posición de la tabla de hash y
 	 * gestionar las colisiones
@@ -127,37 +182,36 @@ public class HashTable <K,T extends Comparable<T>>{
 			value=hashKey((Integer)data);
 		}
 		else 
-			value=hashKey(data);
+			value=hashKey((Long) data);
 		if(tablaHash[value]==null) {
-			tablaHash[value]=new HashElem();
+			//tablaHash[value]=new Nodo<>(data,value);
 		}
-		if(tablaHash[value].estado!=2) {
-			tablaHash[value]=new HashElem(data);
+		if(tablaHash[value]==null) {
+			//tablaHash[value]=new Nodo<>(data);
 			firstElem=value;
 			nElems++;
-			if(factorCarga())
+			if(factorCarga()>=0.75)
 				resize();
 		}
-		else if(tablaHash[value].estado==2) {
+		else if(tablaHash[value]!=null) {
 
 			//System.out.println("OCUPADO");
 			counter++;
 			//nElems++;
 			//tablaHash[value].addElems();
 
-			tablaHash[value].append(new Nodo(data));
+			//tablaHash[value].addata,value);
 		}
 
 
 		return value;
 	}
 	public boolean conte(K elem){
-
+		return true;
 	}
 	/**
 	 * Method used to generate random long values given an upper limit
 	 * @param nNumbers amount of numbers to generate
-	 * @param rightLimit upper bound
 	 * @return array of generated long numbers
 	 */
 	public long[] getNumericLong(Integer nNumbers,long nDigits) {
@@ -205,61 +259,11 @@ public class HashTable <K,T extends Comparable<T>>{
 	}
 
 	/**
-	 * Método usado para hacer pruebas con strings aleatorias
-	 * @param nWords
-	 * @param n
-	 * @return
-
-	public String[] getAlphaNumericString(int nWords,int n)
-	{
-
-
-		//nElems=nWords;
-		//System.out.println("COUNTER= "+ counter);
-		fileName=nWords+"strings.csv";
-		String[] array=new String[nWords];
-		// chose a Character random from this String
-
-		try {
-			if(firstTime)
-				writer=new FileWriter(fileName);
-			else
-				writer=new FileWriter(fileName,true);
-			// create StringBuffer size of AlphaNumericString
-			int i=0;
-
-			StringBuilder pb=new StringBuilder();
-			for(int j=0;j<nWords;j++) {
-				String temp=randomString(n);
-
-
-
-				int key=hashing((T)temp);
-				//System.out.println("1- key: "+key+" frase: "+temp);
-				array[j]=temp;
-				writer.write("key= "+key+";"+temp+'\n');
-				writer.flush();
-				//nElems++;
-			}
-
-
-			writer.close();
-			System.out.println("-Valors guardats correctament al fitxer '"+fileName+"'");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		firstTime=false;
-		return array;
-	}
-	 */
-	/**
 	 * Método usado para buscar un elemento pasado como parámetro
 	 * @param data elemento que queremos buscar
 	 * @return texto que usaremos para guardar en el fichero LogBusqueda e imprimir por pantalla
 	 */
-	public int findElem(T data) {
+	public int findElem(K data) {
 		int iterations=0;
 		int key=0;
 		if(data instanceof Integer) {
@@ -268,7 +272,7 @@ public class HashTable <K,T extends Comparable<T>>{
 		else if(data instanceof Long)
 			key=hashKey(((Long) data).longValue());
 		else if(data != null)
-			key=hashKey(data);
+			key=hashKey((Long) data);
 		else key=(data.hashCode()&0x7fffffff)%tableSize;
 		int posi=0;
 		String text=new String();
@@ -319,46 +323,30 @@ public class HashTable <K,T extends Comparable<T>>{
 	 * Método que calcula el factor de carga para saber si hay que redimensionar la tabla de hash
 	 * @return true si hay que redimensionar
 	 */
-	public boolean factorCarga() {
+	public float factorCarga() {
 		//System.out.println("nElems= "+nElems);
 		float res=(float)nElems/tablaHash.length;
 		//System.out.println(res);
-		if(res>0.75) {
-			return true;
-		}
-		return false;
+		return res;
 	}
 	/**
 	 * Método encargado de redimensionar la tabla de hash y recalcular todos los hashes de nuevo
 	 */
 	public void resize() {
-		tableSize*=3;
-		int size=tablaHash.length;
-		HashElem[]aux=new HashElem[tableSize];
-		for(int i=0;i<tablaHash.length;i++) {
-			aux[i]=tablaHash[i];
+		Nodo[]listaAux=new Nodo[tablaHash.length*2];
+		HashTable<K,T> tablaAux=new HashTable<>();
+		HashTable <K,T> aux=new HashTable<>();
+		Nodo temp;
+		for(int i=0;i<tablaHash.length;i++){
+			temp=tablaHash[i];
+			while(temp!=null){
+
+			}
+			listaAux[i]=tablaHash[i];
 
 		}
-		tablaHash=new HashElem[aux.length];
-		int i=0;
-		int mode=1;
-		int key=0;
-		for(int j=0;j<size;j++) {
-			//tablaHash[j]=aux[j];
-			if(aux[j]!=null) {
-				Nodo temp=aux[j].firstElem;
-				while(aux[j].firstElem!=null&&aux[j].firstElem.data!=null&&temp!=null) {
-					if(temp!=null&&temp.data instanceof Long) {
-						//System.out.println(temp.data);
-						key=hashing((Long) temp.data);
-					}
-					else {
-						key=hashing((T)temp.data);
-					}
-					temp=temp.nextCol;
-				}
-			}
-		}
+		tablaHash=listaAux;
+		tableSize=tablaHash.length;
 
 	}
 
@@ -366,7 +354,7 @@ public class HashTable <K,T extends Comparable<T>>{
 	 * Método encargado de imprimir todos los elementos y colisiones de la tabla de hash
 	 */
 	public void printList() {
-		Nodo aux=new Nodo();
+		Nodo aux=null;
 		String toWrite=new String();
 		String fileName=new String("hashing.csv");
 		try {
@@ -375,7 +363,7 @@ public class HashTable <K,T extends Comparable<T>>{
 			if(nElems<tablaHash.length) {
 				for(int i=0;i<tablaHash.length;i++) {
 					if(tablaHash[i]!=null) {
-						aux=tablaHash[i].firstElem;
+						aux=tablaHash[i];
 						while(aux!=null) {
 							System.out.println("key= "+i+", data= "+aux.data);
 							writer.write("key= "+i+";"+aux.data+'\n');
@@ -396,7 +384,7 @@ public class HashTable <K,T extends Comparable<T>>{
 		String fileName=new String();
 		FileWriter escribir=null;
 		int nElems=tablaHash.length;
-		Nodo temp=new Nodo();
+		Nodo temp=null;
 		int key;
 		try {
 
@@ -409,8 +397,8 @@ public class HashTable <K,T extends Comparable<T>>{
 		for(int i=0;i<nElems;i++) {
 			try {
 				if(tablaHash[i]!=null) {
-					temp=tablaHash[i].firstElem;
-					while(tablaHash[i].firstElem!=null&&tablaHash[i].firstElem.data!=null&&temp!=null) {
+					temp=tablaHash[i];
+					while(tablaHash[i]!=null&&tablaHash[i].data!=null&&temp!=null) {
 						if(temp.data instanceof Long||temp.data instanceof Integer) {
 							try {
 								escribir.write("key= "+i+";"+temp.data+'\n');
@@ -436,5 +424,7 @@ public class HashTable <K,T extends Comparable<T>>{
 			}
 		}
 	}
+
+
 }
 

@@ -4,7 +4,7 @@ import Exceptions.ElementoNoEncontrado;
 public class HashElem<K,T extends Comparable<T>> {
 	int nElems=0;
 	public K key;
-	public final int hash;
+
 	T data;
 	int estado=0;	//0-Empty 1-Deleted 2-Full
 	Nodo firstElem;
@@ -21,14 +21,15 @@ public class HashElem<K,T extends Comparable<T>> {
 	}
 	public HashElem(K key,T data,int hash){
 		this.key=key;
-		this.firstElem=new Nodo(data);
-		this.hash=hash;
+		firstElem=new Nodo(data);
+		lastNode=firstElem;
+		nElems=1;
 	}
 	/**
 	 * Constructor vacío
 	 */
 	public HashElem() {
-		firstElem=new Nodo();
+		firstElem=null;
 		estado=0;
 	}
 	/**
@@ -44,11 +45,19 @@ public class HashElem<K,T extends Comparable<T>> {
 	 */
 	public void append(Nodo next) {
 		Nodo last=next;
-		if(nElems==1) {
-			firstElem.setNextCol(last);
+		if(nElems==0){
+			this.firstElem=next;
+			lastNode=firstElem;
 		}
-		lastNode.setNextCol(next);
-		lastNode=lastNode.nextCol;
+		else if(nElems==1) {
+			firstElem.setNextCol(last);
+			lastNode=firstElem.nextCol;
+		}
+		else{
+			lastNode.setNextCol(next);
+			lastNode=lastNode.nextCol;
+		}
+
 		nElems++;
 	}
 	/**
@@ -81,7 +90,7 @@ public class HashElem<K,T extends Comparable<T>> {
 			}
 			else {
 				try {
-					if(aux.data.compareTo(data)==0&&aux.data!=null)
+					if(aux.compareTo(data)==0&&aux.data!=null)
 						return i;
 					}catch(ClassCastException e) {
 

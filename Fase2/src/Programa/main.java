@@ -1,5 +1,6 @@
 package Programa;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,25 +11,74 @@ import java.util.Objects;
 import java.util.Scanner;
 
 import Data.*;
-class prueba<T>{
-	int num1,num2;
-	public <T>prueba(T data){
-		System.out.println("El número es: "+data.toString());
-		String str=new String();
-		System.out.println(Objects.hashCode(12));
-	}
+import Exceptions.ElementoNoEncontrado;
 
-}
 public class main {
 	public static FileWriter file;
 	public static Scanner scan;
-	public static <T extends Comparable<T>>void main(String[] args)throws InterruptedException, IOException  {
+
+	public static <K,T extends Comparable<T>>void main(String[] args)throws InterruptedException, IOException  {
 		// PROGRAMA PRINCIPAL PART HASHINGS
 		int opcio=1;
-		Nodo nodo1=new Nodo(12);
-		Nodo nodo2=new Nodo(12);
+		int num1=12;
+		int num2=5;
+		int key1,key2;
+		FileWriter file=new FileWriter(new File("numeros.txt"));
+
+		Nodo nodo1=new Nodo(333);
+		Nodo nodo2=new Nodo(555);
+		Nodo nodo3=new Nodo(777);
+		Nodo nodo4=new Nodo(888);
+		HashTable table=new HashTable();
+		for(int i=0;i<100;i++){
+			int n=randomInt();
+			int hash=table.hash(n);
+			int ind=table.getIndex(n);
+			table.Inserir(n,n);
+			file.write("Num: "+n+", hash: "+hash+", index: "+ind+"\n");
+		}
+		file.close();
+		int n=0;
+		while(n!=-1){
+			scan=new Scanner(System.in);
+			System.out.println("Introduce el número que quieres buscar");
+			n=scan.nextInt();
+			try{
+
+			System.out.println(table.Buscar(n));
+			}catch(ElementoNoEncontrado e){
+				System.out.println("NO ENCONTRADO");
+			}
+		}
+
+		try{
+			System.out.println(table.Buscar(nodo1));
+			table.resize();
+			System.out.println(table.Buscar(nodo1));
+
+		}catch(ElementoNoEncontrado e){
+
+		}
+		try{
+
+			System.out.println(table.Buscar(nodo2));
+		}catch(ElementoNoEncontrado e){
+
+		}
+		try{
+
+			System.out.println(table.Buscar(nodo3));
+		}catch(ElementoNoEncontrado e){
+
+		}
+		try{
+			System.out.println(table.Buscar(nodo4));
+		}catch(ElementoNoEncontrado e){
+			System.out.println("ERROR");
+		}
+
 		System.out.println("hash1= "+Objects.hashCode(nodo1)+" hash2= "+Objects.hashCode(nodo2));
-		ListaDoble<Integer>lista=new ListaDoble<>();
+		ListaDoble<Integer,Integer>lista=new ListaDoble<>();
 		lista.Inserir(123);
 		lista.Inserir(12312);
 		lista.Inserir(989534);

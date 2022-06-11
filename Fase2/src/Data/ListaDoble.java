@@ -5,7 +5,7 @@ import Exceptions.NoSePuede;
 
 import java.util.Iterator;
 
-public class ListaDoble<T extends Comparable<T>>{
+public class ListaDoble<K,T extends Comparable<T>>{
 	private Nodo inicio,fin;
 	private int nElems;
 	private int posicioIterator;
@@ -22,7 +22,7 @@ public class ListaDoble<T extends Comparable<T>>{
 		//inicio=new Nodo(null);
 		this.nElems++;
 		
-		Nodo<T>nodoAux=inicio;
+		Nodo<K,T>nodoAux=inicio;
 		while(i<nElems-1) {
 			nodoAux.nextCol=new Nodo(i);
 			nodoAux.nextCol.prev=nodoAux;
@@ -69,7 +69,7 @@ public class ListaDoble<T extends Comparable<T>>{
 	public void Inserir(int posi,T data) throws NoSePuede {
 		if(posi<0||posi>nElems) 
 			throw new NoSePuede(posi);
-		Nodo<T>aux=new Nodo<T>(data);
+		Nodo<K,T>aux=new Nodo<K,T>(data);
 		if(inicio==null) {
 			inicio=aux;
 			fin=aux;
@@ -85,7 +85,7 @@ public class ListaDoble<T extends Comparable<T>>{
 			fin=aux;
 		}
 		else {
-			Nodo<T>nodoAux=inicio;
+			Nodo<K,T>nodoAux=inicio;
 			for(int i=1;i<posi;i++) {
 				nodoAux=nodoAux.nextCol;
 			}
@@ -167,10 +167,10 @@ public class ListaDoble<T extends Comparable<T>>{
 
 		while(i<nElems) {
 			if(aux.data instanceof Ciutada&&dato instanceof Ciutada) {
-				if(aux.data.compareTo(temp)==0) 
+				if(aux.compareTo(temp)==0)
 					return n;
 			}
-			else if (aux.data.compareTo(new Ciutada(null,null,temp))==0)
+			else if (aux.compareTo(new Ciutada(null,null,temp))==0)
 				return n;
 			aux=aux.nextCol;
 			n++;i++;
