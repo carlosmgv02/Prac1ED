@@ -13,7 +13,6 @@ public class Ciutada implements Comparable<Ciutada>{
 		return DNI;
 	}
 
-
 	@Override
 	public int compareTo(Ciutada o) {
 

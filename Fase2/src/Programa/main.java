@@ -1,11 +1,9 @@
 package Programa;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.Thread;
-import java.util.Arrays;
+
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Scanner;
@@ -17,67 +15,28 @@ public class main {
 	public static FileWriter file;
 	public static Scanner scan;
 
-	public static <K,T extends Comparable<T>>void main(String[] args)throws InterruptedException, IOException  {
+	public static void main(String[] args)throws InterruptedException, IOException  {
 		// PROGRAMA PRINCIPAL PART HASHINGS
 		int opcio=1;
-		int num1=12;
-		int num2=5;
-		int key1,key2;
-		FileWriter file=new FileWriter(new File("numeros.txt"));
 
-		Nodo nodo1=new Nodo(333);
-		Nodo nodo2=new Nodo(555);
-		Nodo nodo3=new Nodo(777);
-		Nodo nodo4=new Nodo(888);
-		HashTable table=new HashTable();
-		for(int i=0;i<100;i++){
-			int n=randomInt();
-			int hash=table.hash(n);
-			int ind=table.getIndex(n);
-			table.Inserir(n,n);
-			file.write("Num: "+n+", hash: "+hash+", index: "+ind+"\n");
-		}
-		file.close();
-		int n=0;
-		while(n!=-1){
-			scan=new Scanner(System.in);
-			System.out.println("Introduce el número que quieres buscar");
-			n=scan.nextInt();
-			try{
 
-			System.out.println(table.Buscar(n));
-			}catch(ElementoNoEncontrado e){
-				System.out.println("NO ENCONTRADO");
-			}
-		}
+		FileWriter file=new FileWriter("numeros.txt");
+		Ciutada carlos=new Ciutada("Carlos","Martinez","49424598J");
+		Ciutada david=new Ciutada("David","Martí","88887423");
+		Ciutada manuel=new Ciutada("MAnuel","Ramirez","423432");
+		Ciutada jose=new Ciutada("Jose","david","131381");
+		Ciutada ser=new Ciutada("Ser","Juanita","939131");
+		Ciutada paco=new Ciutada("Paco","Miguelañez","939131");
 
-		try{
-			System.out.println(table.Buscar(nodo1));
-			table.resize();
-			System.out.println(table.Buscar(nodo1));
+		HashTable<String,Ciutada> table=new HashTable<>();
+		table.Inserir("49424598J",carlos);
+		table.Inserir("88887423",david);
+		table.Inserir("423432",manuel);
+		table.Inserir("131381",jose);
+		table.Inserir("939131",ser);
+		table.Inserir("939131",paco);
 
-		}catch(ElementoNoEncontrado e){
 
-		}
-		try{
-
-			System.out.println(table.Buscar(nodo2));
-		}catch(ElementoNoEncontrado e){
-
-		}
-		try{
-
-			System.out.println(table.Buscar(nodo3));
-		}catch(ElementoNoEncontrado e){
-
-		}
-		try{
-			System.out.println(table.Buscar(nodo4));
-		}catch(ElementoNoEncontrado e){
-			System.out.println("ERROR");
-		}
-
-		System.out.println("hash1= "+Objects.hashCode(nodo1)+" hash2= "+Objects.hashCode(nodo2));
 		ListaDoble<Integer,Integer>lista=new ListaDoble<>();
 		lista.Inserir(123);
 		lista.Inserir(12312);
@@ -98,10 +57,7 @@ public class main {
 			Ciutada ciudadano2=new Ciutada("Genis","Martínez","49422343K");
 			Ciutada ciudadano3=new Ciutada("David","Martí","77726323A");
 			Ciutada ciudadano4=new Ciutada("Albert","Solé","49424598Z");
-			tab.hashing(ciudadano);
-			tab.hashing(ciudadano2);
-			tab.hashing(ciudadano3);
-			tab.hashing(ciudadano4);
+
 			searchElement(tab);
 			break;
 		}
@@ -110,12 +66,12 @@ public class main {
 	
 	public static void mostrarMenu() throws InterruptedException, IOException{
 		Thread t=Thread.currentThread();
-		long duration=0L;
+		long duration;
 		
 		long initTime;
 		long endTime;
-		String print=new String();
-		Long []searchElems;
+		String print;
+		int []searchElems;
 		FileWriter search=null;
 		//long duration;
 		try {
@@ -137,46 +93,52 @@ public class main {
 		//t.sleep(3500);
 		
 		
-		int nElems=100;
-		HashTable numbers=null;
+		int nElems=50000;
+		HashTable<Integer,Integer> numbers=null;
 		int[]digits;
 		int i=0;
 		do {
-			
-			numbers=new HashTable();
+			numbers=new HashTable<>();
+			digits = new int[nElems];
 			//We add the strings to the string array called 'sentence'
 			separator();
 			
-			
-			//We add the long numbers to the long array called 'digits'
-			initTime=System.nanoTime();
-			digits=generateNumber(numbers,nElems);
-			//numbers.printHash();
-			endTime=System.nanoTime();
-			
-			duration=(endTime-initTime);
-			System.out.println("\tAfegir els "+nElems+" "+digits.getClass().getSimpleName()+ "  ha trigat "+duration+" ns");
+			for(int k=0;k<nElems;k++) {
+				digits[k]=randomInt();
+				numbers.Inserir(digits[k],digits[k]);
+			}
+
+
 			
 			//Trying to find some elements that don't exist and some other that do
 			try {
 				//Escribimos en un fichero los elementos que encuentra y los que no, para poder visualizarlo más comodamente
 				search=new FileWriter("LogBusqueda.txt");
-			searchElems=new Long[nElems/5];
+			searchElems=new int[nElems/5];
 			for(int j=0;j<nElems/5;j++) {
 				int elem=digits[j*2];
 				initTime=System.nanoTime();
-				searchElems[j]=Long.valueOf(numbers.findElem(elem));
+				try{
+				searchElems[j]=numbers.Buscar(elem);
+
+				}catch(ElementoNoEncontrado e){
+
+				}
 				if(searchElems[j]==-1) {
 					//System.out.println("yep");
 					print="Element "+elem+" not found";
 				}
 				else
 					print=searchElems[j]+" iterations 'till element found";
-				endTime=System.nanoTime();
-				duration=(endTime-initTime);
+
 				search.write(print+'\n');
 				search.flush();
-				int iter=numbers.findElem(randomInt());
+				int iter;
+				try{
+				iter=numbers.Buscar(randomInt());
+				}catch(ElementoNoEncontrado e){
+					iter=-1;
+				}
 				if(iter==-1)
 					print="Element "+elem+" not found";
 				else
@@ -203,13 +165,13 @@ public class main {
 		}while(n<4);
 		//costes.close();
 	}
-	public static double stDev(Long[]nums) {
+	public static double stDev(int[]nums) {
 		double stDev=0.0,sum=0.0;
-		for(int i=0;i<nums.length&&nums[i]!=null;i++) {
+		for(int i=0;i<nums.length&&nums[i]!=0;i++) {
 			sum+=nums[i];
 		}
 		double media=sum/nums.length;
-		for(int j=0;j<nums.length&&nums[j]!=null;j++) {
+		for(int j=0;j<nums.length&&nums[j]!=0;j++) {
 			stDev+=Math.pow(nums[j]-media, 2);
 		}
 		 double sq = stDev / nums.length;
@@ -239,7 +201,7 @@ public class main {
 			
 			for(int i =0;i<nElems;i++) {
 				number=randomInt();
-				key=has.hashing(number);
+				//key=has.hashing(number);
 				array[i]=number;
 			}
 		return array;
@@ -256,20 +218,16 @@ public class main {
 		try { 
 		data=scan.next();
 		
-		if(isNumeric(data)) {
-			if(data.equalsIgnoreCase("-1"))System.exit(0);;
-			System.out.println(table.findElem(Integer.parseInt(data)));
-			
-		}
-		else
-			System.out.println(table.findElem(data));
+
+		//else
+			//System.out.println(table.findElem(data));
 		}catch(NumberFormatException e){
 			System.out.println("EL número introduit no és vàlid");
 		}
 		}while(!data.equalsIgnoreCase("-1"));
 		
 	}
-	public static void writeFile(String fileName,int listLength,Long accesos,Long[]soFar) {
+	public static void writeFile(String fileName,int listLength,int accesos,int[]soFar) {
 		//FileWriter file=null;
 		//double secs=(double)accesos/1000000000.0;
 		try {
@@ -281,36 +239,8 @@ public class main {
 			e.printStackTrace();
 		}
 	}
-	/**
-	 * Comprueba si una String es un número
-	 * @param str string a comprobar
-	 * @return true if numeric
-	 */
-	public static boolean isNumeric(String str) { 
-		  try {  
-		    Double.parseDouble(str);  
-		    return true;
-		  } catch(NumberFormatException e){  
-		    return false;  
-		  }  
-		}
-	/**
-	 * Genera número long aleatorio
-	 * @return random long
-	 */
-	public static long randomLong() {
-		
-		long leftLimit=1L;
-		long rightLimit;
-		long number;
-		for(int i=0;i<10-1;i++) {
-			leftLimit*=10;
 
-		}
-		rightLimit=(leftLimit*10)-1;
-		number=leftLimit+(long)(Math.random()*(rightLimit-leftLimit));
-		return number;
-	}
+
 	/**
 	 * Genera un número entero aleatorio
 	 * @return random int
