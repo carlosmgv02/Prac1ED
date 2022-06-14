@@ -97,7 +97,7 @@ public class HashTable <K,T extends Comparable<T>>implements TADTaulaHash<K,T>{
 				replace(index,offset,data);
 			}catch (ElementoNoEncontrado e){
 				tablaHash[index].add(key,data,hash);
-				nElems++;
+				//nElems++;
 			}
 
 		}
@@ -112,7 +112,7 @@ public class HashTable <K,T extends Comparable<T>>implements TADTaulaHash<K,T>{
 	@Override
 	public int Buscar(K key) throws ElementoNoEncontrado{
 		int hash=hash(key);
-		int index=hash%tableSize;
+		int index=hash%tablaHash.length;
 		int c=0;
 		Nodo<K,T>temp=tablaHash[index];
 		if(temp!=null){
@@ -276,23 +276,15 @@ public class HashTable <K,T extends Comparable<T>>implements TADTaulaHash<K,T>{
 				if(tablaHash[i]!=null) {
 					temp=tablaHash[i];
 					while(tablaHash[i]!=null&&tablaHash[i].data!=null&&temp!=null) {
-						if(temp.data instanceof Long||temp.data instanceof Integer) {
+
 							try {
-								escribir.write("key= "+i+";"+temp.data+'\n');
+								escribir.write("key= "+i+"; "+temp.data+"; hash= "+temp.hash+"\n");
 								escribir.flush();
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-						}
-						else {
-							try {
-								escribir.write("key= "+i+";"+temp.data+'\n');
-								escribir.flush();
-							}catch(IOException e) {
-								System.out.println(e.getMessage());
-							}
-						}
+
 						temp=temp.nextCol;	
 					}
 				} 

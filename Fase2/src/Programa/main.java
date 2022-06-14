@@ -64,10 +64,11 @@ public class main {
 	}
 	
 	
-	public static void mostrarMenu() throws InterruptedException, IOException{
+	public static void mostrarMenu() throws InterruptedException, IOException {
 		Thread t=Thread.currentThread();
 		long duration;
-		
+		boolean first=true;
+		int num=0;
 		long initTime;
 		long endTime;
 		String print;
@@ -93,7 +94,7 @@ public class main {
 		//t.sleep(3500);
 		
 		
-		int nElems=50000;
+		int nElems=1000;
 		HashTable<Integer,Integer> numbers=null;
 		int[]digits;
 		int i=0;
@@ -102,13 +103,27 @@ public class main {
 			digits = new int[nElems];
 			//We add the strings to the string array called 'sentence'
 			separator();
-			
+			int nu=0;
 			for(int k=0;k<nElems;k++) {
-				digits[k]=randomInt();
+
+					do {
+
+						digits[k] = randomInt();
+						try {
+						nu=numbers.Buscar(digits[k]);
+						}catch(ElementoNoEncontrado e){
+							nu=-1;
+						}
+						if (i == 2 && first) {
+							num = digits[k];
+							first = false;
+						}
+					} while (nu>=0);
+
 				numbers.Inserir(digits[k],digits[k]);
 			}
 
-
+			System.out.println("NUM "+num+" hash: "+numbers.hash(num)+" ind= "+numbers.hash(num)%numbers.Mida());
 			
 			//Trying to find some elements that don't exist and some other that do
 			try {
@@ -161,7 +176,14 @@ public class main {
 		numbers.writeFile();
 		System.out.println("Escriu -1 per a sortir del programa");
 		do {
-		searchElement(numbers);n++;
+			System.out.println("NUM "+num+" hash: "+numbers.hash(num)+" ind= "+numbers.hash(num)%numbers.Mida());
+			try {
+				System.out.println(numbers.Buscar(num));
+			} catch (ElementoNoEncontrado e) {
+				throw new RuntimeException(e);
+			}
+			searchElement(numbers);
+			n++;
 		}while(n<4);
 		//costes.close();
 	}
@@ -220,9 +242,13 @@ public class main {
 		
 
 		//else
-			//System.out.println(table.findElem(data));
+
+			System.out.println(table.Buscar(data));
 		}catch(NumberFormatException e){
 			System.out.println("EL número introduit no és vàlid");
+		}
+		catch(ElementoNoEncontrado e){
+			System.out.println(e.getMessage());
 		}
 		}while(!data.equalsIgnoreCase("-1"));
 		
