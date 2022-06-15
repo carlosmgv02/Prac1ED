@@ -3,7 +3,7 @@ import java.util.*;
 
 import Exceptions.*;
 public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Iterable<Ciutada>{
-	private Nodo inicio,fin;
+	public Nodo inicio,fin;
 	private int nElems;
 	private int posicioIterator;
 
@@ -21,7 +21,7 @@ public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Itera
 		
 		Nodo<T>nodoAux=inicio;
 		while(i<nElems-1) {
-			nodoAux.siguiente=new Nodo(i);
+			nodoAux.siguiente=new Nodo<>(i);
 			nodoAux.siguiente.anterior=nodoAux;
 			nodoAux=nodoAux.siguiente;
 			this.nElems++;i++;
@@ -49,7 +49,7 @@ public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Itera
 	 */
 	public void Inserir(T data) {
 		if(!empty()) {
-			fin=new Nodo(null,fin,data);
+			fin=new Nodo<>(null,fin,data);
 			fin.anterior.siguiente=fin;
 
 		}
@@ -159,16 +159,11 @@ public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Itera
 		int n=1,i=0;
 		Nodo aux=inicio;
 		String temp=new String();
-		if(dato instanceof String)
-			temp=(String)dato;
 
 		while(i<nElems) {
-			if(aux.data instanceof Ciutada&&dato instanceof Ciutada) {
-				if(aux.data.compareTo(temp)==0) 
-					return n;
-			}
-			else if (aux.data.compareTo(new Ciutada(null,null,temp))==0)
+			if(aux.data.compareTo(dato)==0)
 				return n;
+
 			aux=aux.siguiente;
 			n++;i++;
 		}

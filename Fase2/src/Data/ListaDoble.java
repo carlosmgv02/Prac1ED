@@ -3,40 +3,21 @@ package Data;
 import Exceptions.ElementoNoEncontrado;
 import Exceptions.NoSePuede;
 
-import java.util.Iterator;
-
 public class ListaDoble<K,T extends Comparable<T>>{
-	private Nodo inicio,fin;
+	private Nodo<K,T> inicio,fin;
 	private int nElems;
 	private int posicioIterator;
 
 	public ListaDoble() {
 		inicio=fin=null;
 	}
-	/**
-	 * Creació de la llista doblement encadenada donada una mida
-	 * @param nElems
-	 */
-	public ListaDoble(int nElems) {
-		int i=0;
-		//inicio=new Nodo(null);
-		this.nElems++;
-		
-		Nodo<K,T>nodoAux=inicio;
-		while(i<nElems-1) {
-			nodoAux.nextCol=new Nodo(i);
-			nodoAux.nextCol.prev=nodoAux;
-			nodoAux=nodoAux.nextCol;
-			this.nElems++;i++;
 
-		}
-	}
 	
 	/**
 	 * Inicialització del primer element de la llista encadenada
 	 */
 	public void crear() {
-		inicio=new Nodo(null,null,null);
+		inicio=new Nodo<>(null,null,null);
 	}
 	/**
 	 * Mètode que comprova si la llista està plena o no
@@ -52,12 +33,12 @@ public class ListaDoble<K,T extends Comparable<T>>{
 	 */
 	public void Inserir(T data) {
 		if(!empty()) {
-			fin=new Nodo(null,fin,data);
+			fin=new Nodo<>(null,fin,data);
 			fin.prev.nextCol=fin;
 
 		}
 		else {
-			inicio=fin=new Nodo(data);
+			inicio=fin=new Nodo<>(data);
 		}
 		nElems++;
 	}
@@ -69,7 +50,7 @@ public class ListaDoble<K,T extends Comparable<T>>{
 	public void Inserir(int posi,T data) throws NoSePuede {
 		if(posi<0||posi>nElems) 
 			throw new NoSePuede(posi);
-		Nodo<K,T>aux=new Nodo<K,T>(data);
+		Nodo<K,T>aux=new Nodo<>(data);
 		if(inicio==null) {
 			inicio=aux;
 			fin=aux;
@@ -103,12 +84,12 @@ public class ListaDoble<K,T extends Comparable<T>>{
 	public T Obtenir(int posi)throws NoSePuede {
 		if(posi<nElems&&posi>=0) {
 			int i=0;
-			Nodo aux=inicio;
+			Nodo<K,T> aux=inicio;
 			while(i<posi) {
 				aux=aux.nextCol;
 				i++;
 			}
-			return (T)aux.data;
+			return aux.data;
 		}
 		else {
 			throw new NoSePuede(posi);
@@ -120,7 +101,7 @@ public class ListaDoble<K,T extends Comparable<T>>{
 	 * Mètode per a esborrar un node, utilitzat al mètode 'Esborrar(int posi)'
 	 * @param elem: node a eliminar de la llista
 	 */
-	public void eliminarNodo(Nodo elem) {
+	public void eliminarNodo(Nodo<K,T> elem) {
 		if(inicio==null||elem==null)
 			return;
 		if(inicio==elem)
@@ -140,7 +121,7 @@ public class ListaDoble<K,T extends Comparable<T>>{
 	 */
 	public void Esborrar(int posi) {
 		if(posi>=0 && posi<nElems) {
-			Nodo aux=inicio;
+			Nodo<K,T> aux=inicio;
 			int i;
 			for(i=1;aux!=null&&i<posi;i++) {
 				aux=aux.nextCol;
@@ -160,36 +141,17 @@ public class ListaDoble<K,T extends Comparable<T>>{
 	 */
 	public int Buscar(T dato)throws ElementoNoEncontrado {
 		int n=1,i=0;
-		Nodo aux=inicio;
-		String temp=new String();
-		if(dato instanceof String)
-			temp=(String)dato;
-
+		Nodo<K,T> aux=inicio;
 		while(i<nElems) {
-			if(aux.data instanceof Ciutada&&dato instanceof Ciutada) {
-				if(aux.compareTo(temp)==0)
+				if(aux.data.compareTo(dato)==0)
 					return n;
-			}
-			else if (aux.compareTo(new Ciutada(null,null,temp))==0)
-				return n;
 			aux=aux.nextCol;
 			n++;i++;
 		}
 		throw new ElementoNoEncontrado(i);
 
 	}
-	
-	/**
-	 * Mètode de l'iterator
-	 */
 
-	/**
-	 * Mètode per a duplicar llista actual
-	 * @return copia
-	 */
-	public ListaDoble copia() {
-		return this;
-	}
 
 	public int Longitud() {
 		return nElems;

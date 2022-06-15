@@ -1,4 +1,5 @@
 package Programa;
+
 import java.util.InputMismatchException;
 import java.util.*;
 
@@ -9,23 +10,29 @@ public class main {
 	private static Scanner scan;
 	public static void main(String[] args) throws ElementoNoEncontrado, NoSePuede {
 		// TODO Auto-generated method stub
-		ListaDoble<Ciutada> lista=new ListaDoble<Ciutada>(4);
+		ListaDobleOrdenada<Integer>listaux=new ListaDobleOrdenada<>();
+		listaux.Inserir(12);
+		listaux.Inserir(13);
+		listaux.Inserir(14);
+		listaux.Inserir(15);
+		listaux.Inserir(16);
 		Boolean bool=false;
 		ListaDoble <Ciutada>listita=new ListaDoble<Ciutada>();
 		Ciutada ciudadano=new Ciutada("Carlos","Martínez","49424598J");
 		Ciutada ciudadano2=new Ciutada("Genis","Martínez","49422343K");
 		Ciutada ciudadano3=new Ciutada("David","Martí","77726323A");
-		Ciutada ciudadano4=new Ciutada("Albert","Solé","49424598Z");
+		Ciutada ciudadano4=new Ciutada("Albert","Solé","49424598J");
 		listita.Inserir(ciudadano);
 		listita.Inserir(ciudadano2);
 		listita.Inserir(ciudadano3);
 		listita.Inserir(ciudadano4);
+		System.out.println(listita.Buscar(ciudadano4));
 		programaPrinc(listita);
 		
 		listita.recorrer();
 		
 	}
-	public static<T> void programaPrinc(ListaDoble llista) throws ElementoNoEncontrado, NoSePuede {
+	public static<T> void programaPrinc(ListaDoble<Ciutada> llista) throws ElementoNoEncontrado, NoSePuede {
 		int menOpt;
 		//ListaDoble llista=null;
 		
@@ -38,7 +45,7 @@ public class main {
 		 * 1-Creació de la llista doblement encadenada
 		 */
 		case 1:
-			llista=new ListaDoble();
+			llista=new ListaDoble<>();
 			break;
 		/**
 		 * 2-Demanem a l'usuari un Ciutadà i l'afegim a la llista
@@ -131,7 +138,7 @@ public class main {
 			System.out.println("Introdueix l'element que vols buscar: ");
 			//scan=new Scanner(System.in);
 			String temp=scan.next();
-			int n=llista.Buscar(temp);
+			int n=llista.Buscar(new Ciutada("X","Y",temp));
 			System.out.println("S'han mirat "+n+ " elements fins a trobar el que buscaves");
 			break;
 		case 8:
@@ -144,6 +151,8 @@ public class main {
 		System.out.println();
 		}while(menOpt!=0);		
 	}
+
+
 	public static void mostrarMenu() {
 		System.out.println("BENVINGUT/UDA AL PROGRAMA: ");
 		System.out.println("1- Crear llista doblement enllaçada");

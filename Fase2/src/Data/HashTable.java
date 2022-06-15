@@ -1,22 +1,11 @@
 package Data;
 import java.io.*;
-import java.math.BigInteger;
-import java.util.Random;
-import java.util.Scanner;
 
 import Exceptions.*;
 public class HashTable <K,T extends Comparable<T>>implements TADTaulaHash<K,T>{
-	Scanner scan;
 	int tableSize=10;
-
-
 	Nodo<K,T>[] tablaHash;
-	String fileName;
-	int firstElem;
-	int counter;
 	int nElems;
-	boolean firstTime=true;
-	FileWriter writer;
 	public HashTable(int nElems){
 		tablaHash=new Nodo[nElems];
 		tableSize=nElems;
@@ -25,8 +14,8 @@ public class HashTable <K,T extends Comparable<T>>implements TADTaulaHash<K,T>{
 	 * Constructor principal de la clase HashTable
 	 */
 	public HashTable() {
-		tablaHash=new Nodo[tableSize];
-		nElems=0;
+		Crear();
+
 
 	}
 	public int getIndex(K key){
@@ -42,13 +31,12 @@ public class HashTable <K,T extends Comparable<T>>implements TADTaulaHash<K,T>{
 	public int hash(K key){
 
 		String str=key.toString();
-		BigInteger power;
-		int hash=key.hashCode();
+		int hash=0;//=key.hashCode();
 
-			/*for(int i=1;i<str.length();i++){
+			for(int i=1;i<str.length();i++){
 
 				hash+=((int)str.charAt(i))*(32+i);
-			}*/
+			}
 			hash=hash < 0 ? hash * -1 : hash;
 		return hash;
 	}
@@ -70,6 +58,7 @@ public class HashTable <K,T extends Comparable<T>>implements TADTaulaHash<K,T>{
 	@Override
 	public void Crear() {
 		tablaHash=new Nodo[tableSize];
+		nElems=0;
 	}
 
 	@Override
@@ -79,16 +68,13 @@ public class HashTable <K,T extends Comparable<T>>implements TADTaulaHash<K,T>{
 			//printTable();
 			try{
 			resize();
-
-			}catch(ElementoNoEncontrado e){
-
+			}catch(ElementoNoEncontrado ignored){
 			}
-			//System.out.println("RESIZED");
 		}
 		int hash=hash(key);
 		int index=getIndex(key);
 		if(tablaHash[index]==null){
-			tablaHash[index]=new Nodo(key,data,hash);
+			tablaHash[index]=new Nodo<>(key,data,hash);
 			nElems++;
 		}
 		else{
@@ -97,7 +83,7 @@ public class HashTable <K,T extends Comparable<T>>implements TADTaulaHash<K,T>{
 				replace(index,offset,data);
 			}catch (ElementoNoEncontrado e){
 				tablaHash[index].add(key,data,hash);
-				//nElems++;
+
 			}
 
 		}
@@ -117,8 +103,7 @@ public class HashTable <K,T extends Comparable<T>>implements TADTaulaHash<K,T>{
 		Nodo<K,T>temp=tablaHash[index];
 		if(temp!=null){
 			while(temp!=null){
-				if(temp.hash==hash){
-					//System.out.println("FOUND at "+index+" /hash: "+hash);
+				if(temp.key.equals(key)){
 					return c;
 				}
 				temp=temp.nextCol;
@@ -130,13 +115,13 @@ public class HashTable <K,T extends Comparable<T>>implements TADTaulaHash<K,T>{
 	}
 	@Override
 	public int Mida() {
-		return nElems;
+		return tablaHash.length;
 	}
 
 	/**
 	 * Mètode que esborra un element en cas que existeixi
 	 * @param key clau de l'element
-	 * @throws ElementoNoEncontrado
+	 * @throws ElementoNoEncontrado throws exception if element isn't found
 	 */
 	@Override
 	public void Esborrar(K key) throws ElementoNoEncontrado {
@@ -163,13 +148,13 @@ public class HashTable <K,T extends Comparable<T>>implements TADTaulaHash<K,T>{
 		}
 	}
 	public ListaDoble<K,T>ObtenirValors(){
-		Nodo<K,T>aux;
-		ListaDoble listaAux=new ListaDoble();
-		for(int i=0;i<tablaHash.length;i++){
-			aux=tablaHash[i];
-			while(aux!=null){
-				listaAux.Inserir(aux);
-				aux=aux.nextCol;
+		Nodo<K,T> aux;
+		ListaDoble<K,T> listaAux=new ListaDoble<>();
+		for (Nodo<K, T> hash : tablaHash) {
+			aux = hash;
+			while (aux != null) {
+				listaAux.Inserir(aux.getData());
+				aux = aux.nextCol;
 			}
 		}
 		return listaAux;
@@ -177,12 +162,14 @@ public class HashTable <K,T extends Comparable<T>>implements TADTaulaHash<K,T>{
 
 	public ListaDoble<K,T>ObtenirClaus(){
 		Nodo<K,T>aux;
-		ListaDoble listaAux=new ListaDoble();
-		for(int i=0;i<tablaHash.length;i++){
-			aux=tablaHash[i];
-			while(aux!=null){
-				listaAux.Inserir((Comparable)aux.key);
-				aux=aux.nextCol;
+
+		ListaDoble<K,T> listaAux=new ListaDoble<>();
+		for (Nodo<K, T> hash : tablaHash) {
+			aux = hash;
+			while (aux != null) {
+
+				listaAux.Inserir((T) aux.key);
+				aux = aux.nextCol;
 			}
 		}
 		return listaAux;
@@ -194,10 +181,8 @@ public class HashTable <K,T extends Comparable<T>>implements TADTaulaHash<K,T>{
 	 * @return true si hay que redimensionar
 	 */
 	public float factorCarga() {
-		//System.out.println("nElems= "+nElems);
-		float res=(float)nElems/tablaHash.length;
-		//System.out.println(res);
-		return res;
+
+		return (float)nElems/tablaHash.length;
 	}
 	/**
 	 * Método encargado de redimensionar la tabla de hash y recalcular todos los hashes de nuevo
@@ -205,14 +190,16 @@ public class HashTable <K,T extends Comparable<T>>implements TADTaulaHash<K,T>{
 	public void resize() throws ElementoNoEncontrado {
 		//Nodo[]listaAux=new Nodo[tablaHash.length*2];
 		HashTable<K,T> tablaAux=new HashTable<>(tablaHash.length*2);
-		HashTable <K,T> aux=new HashTable<>();
-		Nodo temp;
-		for(int i=0;i<tablaHash.length;i++){
-			temp=tablaHash[i];
-			while(temp!=null){
-				tablaAux.Inserir((K)temp.key,(T)temp.data);
-				//System.out.println("Num: "+temp.data+"\tHash: "+tablaAux.hash((K)temp.key)+", index: "+tablaAux.getIndex((K)temp.key));
-				temp=temp.nextCol;
+		Nodo<K,T> temp;
+		K key;
+		T data;
+		for (Nodo<K, T> hash : tablaHash) {
+			temp = hash;
+			while (temp != null) {
+				key = temp.getKey();
+				data = temp.getData();
+				tablaAux.Inserir(key, data);
+				temp = temp.nextCol;
 			}
 
 		}
@@ -242,30 +229,18 @@ public class HashTable <K,T extends Comparable<T>>implements TADTaulaHash<K,T>{
 			}
 
 	}
-
-
-	public void printTable(){
-		Nodo aux;//=tablaHash[0];
-		for(int i=0;i< tablaHash.length;i++){
-			aux=tablaHash[i];
-			while(aux!=null){
-				System.out.println("Index: "+i+"\t Valor: "+aux.data+"\t hash: "+aux.hash);
-				aux=aux.nextCol;
-			}
-		}
-	}
 	/**
-	 * NOT USED METHOD TO WRITE A FILE WITH ALL THE VALUES THAT CONTAINS THE HASH TABLE
+	 * METHOD USED TO WRITE A FILE WITH ALL THE VALUES THAT CONTAINS THE HASH TABLE
 	 */
 	public void writeFile () {
-		String fileName=new String();
+
+		String fileName;
 		FileWriter escribir=null;
 		int nElems=tablaHash.length;
 		Nodo temp=null;
-		int key;
 		try {
 
-			fileName="hashCodes.csv";
+			fileName="hashCodes.txt";
 			escribir=new FileWriter(fileName);
 		}catch(IOException e) {
 			System.out.println(e.getMessage());
@@ -275,23 +250,25 @@ public class HashTable <K,T extends Comparable<T>>implements TADTaulaHash<K,T>{
 			try {
 				if(tablaHash[i]!=null) {
 					temp=tablaHash[i];
-					while(tablaHash[i]!=null&&tablaHash[i].data!=null&&temp!=null) {
-
-							try {
+					while(temp!=null) {
 								escribir.write("key= "+i+"; "+temp.data+"; hash= "+temp.hash+"\n");
+								//escribir.write();
 								escribir.flush();
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-
 						temp=temp.nextCol;	
 					}
 				} 
 			}catch(NullPointerException e) {
 				System.out.println(e.getMessage());
+			} catch (IOException e) {
+				throw new RuntimeException(e);
 			}
 		}
+		try {
+			escribir.close();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
 	}
 
 

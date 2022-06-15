@@ -1,12 +1,7 @@
 package Programa;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.Thread;
-
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 import Data.*;
 import Exceptions.ElementoNoEncontrado;
@@ -17,177 +12,200 @@ public class main {
 
 	public static void main(String[] args)throws InterruptedException, IOException  {
 		// PROGRAMA PRINCIPAL PART HASHINGS
-		int opcio=1;
 
+		HashTable<String,Ciutada>tablaAux=new HashTable<>();
 
-		FileWriter file=new FileWriter("numeros.txt");
 		Ciutada carlos=new Ciutada("Carlos","Martinez","49424598J");
-		Ciutada david=new Ciutada("David","Martí","88887423");
-		Ciutada manuel=new Ciutada("MAnuel","Ramirez","423432");
-		Ciutada jose=new Ciutada("Jose","david","131381");
-		Ciutada ser=new Ciutada("Ser","Juanita","939131");
-		Ciutada paco=new Ciutada("Paco","Miguelañez","939131");
+		Ciutada david=new Ciutada("David","Marti","7771391023");
+		Ciutada nil=new Ciutada("Carlos","Martinez","44548898T");
+		Ciutada genis=new Ciutada("Genis","Martinez","73981391P");
+		Ciutada roger=new Ciutada("Roger","Massana","3731918T");
+		Ciutada lluis=new Ciutada("Lluis","Gallart","713739189O");
+		Ciutada gerard=new Ciutada("Gerard","Panisello","3241233Y");
+		Ciutada eros=new Ciutada("Eros","Villar","1413133T");
 
-		HashTable<String,Ciutada> table=new HashTable<>();
-		table.Inserir("49424598J",carlos);
-		table.Inserir("88887423",david);
-		table.Inserir("423432",manuel);
-		table.Inserir("131381",jose);
-		table.Inserir("939131",ser);
-		table.Inserir("939131",paco);
+		try{
+			tablaAux.Inserir("49424598J",carlos);
+			tablaAux.Inserir("7771391023",david);
+			tablaAux.Inserir("44548898T",nil);
+			tablaAux.Inserir("73981391P",genis);
+			tablaAux.Inserir("3731918T",roger);
+			tablaAux.Inserir("713739189O",lluis);
+			tablaAux.Inserir("3241233Y",gerard);
+			tablaAux.Inserir("1413133",eros);
+
+			System.out.println(tablaAux.Buscar("49424598J"));
+			System.out.println(tablaAux.Buscar("7771391023"));
+			System.out.println(tablaAux.Buscar("44548898T"));
+			System.out.println(tablaAux.Buscar("73981391P"));
+			System.out.println(tablaAux.Buscar("3731918T"));
+			System.out.println(tablaAux.Buscar("713739189O"));
+			System.out.println(tablaAux.Buscar("3241233Y"));
+			System.out.println(tablaAux.Buscar("1413133"));
 
 
-		ListaDoble<Integer,Integer>lista=new ListaDoble<>();
-		lista.Inserir(123);
-		lista.Inserir(12312);
-		lista.Inserir(989534);
-		lista.Inserir(5123);
-		lista.Inserir(7564);
 
+		}catch(ElementoNoEncontrado e){
 
-		switch(opcio) {
-		case 1:
-			//Comprovació utilitzant ints
-			mostrarMenu();
-			break;
-		case 2:
-			//Comprovació utilitzant Ciutadans
-			HashTable tab=new HashTable();
-			Ciutada ciudadano=new Ciutada("Carlos","Martínez","49424598J");
-			Ciutada ciudadano2=new Ciutada("Genis","Martínez","49422343K");
-			Ciutada ciudadano3=new Ciutada("David","Martí","77726323A");
-			Ciutada ciudadano4=new Ciutada("Albert","Solé","49424598Z");
-
-			searchElement(tab);
-			break;
 		}
+
+
+
+		//Joc de proves de la taula de hash
+		mostrarMenu();
+		System.out.println("TABLE DONE");
+		//Anàlisi de la llista doblement encadenada
+		JocProvesLlista();
+		System.out.println("LIST DONE");
 	}
 	
 	
-	public static void mostrarMenu() throws InterruptedException, IOException {
-		Thread t=Thread.currentThread();
-		long duration;
-		boolean first=true;
-		int num=0;
-		long initTime;
-		long endTime;
-		String print;
-		int []searchElems;
-		FileWriter search=null;
-		//long duration;
-		try {
-			file=new FileWriter("CosteComputacional.csv");
-			file.write("LIST SIZE;N SEARCHES;STDEV\n");
-			file.flush();
-			//file.close();
-		}catch(IOException e) {
-			System.out.println(e.getMessage());
-		}
+	public static void mostrarMenu() throws IOException {
+
+		int searchElems;
 		
 		System.out.println("BENVINGUT/UDA AL PROGRAMA PRINCIPAL");
 		System.out.println("A continuació s'executaran els següents mètodes de manera automàtica:");
-		System.out.println("1- Crear taula de hash");
-		System.out.println("2- Insertar 100/1.000/10.000 longs a la taula de hash");
-		System.out.println("3- Insertar 100/1.000/10.000 String a la taula de hash");
-		System.out.println("4- Buscarem alguns elements que existeixin i uns altres que no");
+		System.out.println("-Després de finalitzar cada inerció dels elements a la taula de hash anirem buscant" +
+				" números generats aleatoriament");
+		System.out.println("-Un cop generades totes les taules de hash i calculats els seus costos d'accès," +
+				"generarem un fitxer que recollirà un anàlisi del cost mig i desviació estandard tenint en compte" +
+				"els factors mencionats previament.");
 		System.out.println("COMENCEM...\n");
 		//t.sleep(3500);
 		
 		
 		int nElems=1000;
-		HashTable<Integer,Integer> numbers=null;
+		HashTable<Integer,Integer> numbers;
 		int[]digits;
 		int i=0;
+		ArrayList<ArrayList<Integer>>llistaAux=new ArrayList<>();
 		do {
-			numbers=new HashTable<>();
+			System.out.println("nElems= "+nElems);
+			llistaAux.add(new ArrayList<>());
+			numbers=new HashTable<>(nElems);
 			digits = new int[nElems];
-			//We add the strings to the string array called 'sentence'
-			separator();
-			int nu=0;
+
 			for(int k=0;k<nElems;k++) {
-
-					do {
-
-						digits[k] = randomInt();
-						try {
-						nu=numbers.Buscar(digits[k]);
-						}catch(ElementoNoEncontrado e){
-							nu=-1;
-						}
-						if (i == 2 && first) {
-							num = digits[k];
-							first = false;
-						}
-					} while (nu>=0);
+				digits[k] = randomInt(nElems/2);
 
 				numbers.Inserir(digits[k],digits[k]);
 			}
 
-			System.out.println("NUM "+num+" hash: "+numbers.hash(num)+" ind= "+numbers.hash(num)%numbers.Mida());
-			
-			//Trying to find some elements that don't exist and some other that do
+			String fileName="Analisi/LogCerques/"+nElems+"searches.txt";
+			PrintStream output = null;
 			try {
-				//Escribimos en un fichero los elementos que encuentra y los que no, para poder visualizarlo más comodamente
-				search=new FileWriter("LogBusqueda.txt");
-			searchElems=new int[nElems/5];
-			for(int j=0;j<nElems/5;j++) {
-				int elem=digits[j*2];
-				initTime=System.nanoTime();
-				try{
-				searchElems[j]=numbers.Buscar(elem);
-
-				}catch(ElementoNoEncontrado e){
-
-				}
-				if(searchElems[j]==-1) {
-					//System.out.println("yep");
-					print="Element "+elem+" not found";
-				}
-				else
-					print=searchElems[j]+" iterations 'till element found";
-
-				search.write(print+'\n');
-				search.flush();
-				int iter;
-				try{
-				iter=numbers.Buscar(randomInt());
-				}catch(ElementoNoEncontrado e){
-					iter=-1;
-				}
-				if(iter==-1)
-					print="Element "+elem+" not found";
-				else
-					print=iter+" iterations 'till element found";
-				search.write(print+'\n');
-				search.flush();
-				writeFile("CosteComputacional.csv",nElems,searchElems[i],searchElems);
-				
-			}} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			//t.sleep(1500);
-			nElems*=10;i++;
-		}while(nElems<=100000);
-		
-		int n=0;
-		System.out.println("Pots utilitzar el fitxer hashCodes.csv per a fer proves");
-		
-		numbers.writeFile();
-		System.out.println("Escriu -1 per a sortir del programa");
-		do {
-			System.out.println("NUM "+num+" hash: "+numbers.hash(num)+" ind= "+numbers.hash(num)%numbers.Mida());
-			try {
-				System.out.println(numbers.Buscar(num));
-			} catch (ElementoNoEncontrado e) {
+				output = new PrintStream(new FileOutputStream(fileName));
+			} catch (FileNotFoundException e) {
 				throw new RuntimeException(e);
 			}
-			searchElement(numbers);
-			n++;
-		}while(n<4);
-		//costes.close();
+			System.setOut(output);
+				//Escribimos en un fichero los elementos que encuentra y los que no, para poder visualizarlo más comodamente
+
+			for(int j=0;j<nElems;j++) {
+
+				try{
+				searchElems=numbers.Buscar(randomInt(numbers.Mida()/2));
+					llistaAux.get(i).add(searchElems);
+				//totalSearches[i]+=searchElems;
+					System.out.println(searchElems+" iteration until element has been found");
+
+				}catch(ElementoNoEncontrado e){
+					System.out.println(e.getMessage());
+				}
+
+			}
+			System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
+			nElems+=1000;i++;
+		}while(nElems<=50000);
+		numbers.writeFile();
+		scan=new Scanner(System.in);
+		System.out.println("Introduce el numero a buscar");
+		int n=scan.nextInt();
+		try{
+		System.out.println(numbers.Buscar(n));
+
+		}catch(ElementoNoEncontrado e){
+
+		}
+		//Escritura del fitxer
+		FileWriter analisis=new FileWriter("Analisi/CostCompuTaula.csv");
+		analisis.write("MIDA;"+"N ACCESSOS;"+"DESV EST\n");
+		int Elems=1000;
+		for (ArrayList<Integer> lista : llistaAux) {
+			analisis.write(Elems + ";" + mean(lista) + ";" + stDev(lista)+"\n");
+			Elems += 1000;
+		}
+		analisis.close();
+
+
 	}
-	public static double stDev(int[]nums) {
+	public static void JocProvesLlista(){
+		ListaDoble<Integer,Integer>lista=new ListaDoble<>();
+		int nElems=1000;
+		int[]digits;
+		int searchElems=0;
+		ArrayList<ArrayList<Integer>>llistaAux=new ArrayList<>();
+		int i=0;
+		FileWriter analisis=null;
+		try {
+			analisis = new FileWriter("Analisi/CostCompuLlista.csv");
+			analisis.write("MIDA;"+"N ACCESSOS;"+"DESV EST\n");
+		}catch(IOException e) {
+		}
+		do{
+			lista=new ListaDoble<>();
+			System.out.println("nElems= "+nElems);
+			llistaAux.add(new ArrayList<>());
+			digits=new int[nElems];
+			for(int j=0; j<nElems; j++){
+				digits[j]=randomInt(nElems/2);
+				lista.Inserir(digits[j]);
+			}
+			for(int k=0;k<nElems;k++){
+				try{
+					searchElems=lista.Buscar(randomInt(nElems/2));
+					llistaAux.get(i).add(searchElems);
+				}catch(ElementoNoEncontrado e){
+					//System.out.println(e.getMessage());
+				}
+			}
+
+
+			try {
+
+				analisis.write(nElems + ";" + mean(llistaAux.get(i)) + ";" + stDev(llistaAux.get(i)) + "\n");
+			}
+			catch(NullPointerException e){
+				System.out.println(e.getMessage());
+			} catch (IOException e) {
+				System.out.println("FILE ERROR");
+			}
+			i++;
+			nElems+=1000;
+		}while(nElems<=50000);
+			try{
+			analisis.close();
+
+			}catch(IOException e){
+
+			}
+
+
+	}
+	public static double mean(ArrayList<Integer> lista){
+		int sum=0;
+		for(int temp: lista){
+			sum+=temp;
+		}
+		return (double)sum/ lista.size();
+
+	}
+	public static double stDev(ArrayList<Integer>lista) {
+		int[]nums=new int[lista.size()];
+		for(int i=0;i<lista.size();i++){
+			nums[i]=lista.get(i);
+		}
 		double stDev=0.0,sum=0.0;
 		for(int i=0;i<nums.length&&nums[i]!=0;i++) {
 			sum+=nums[i];
@@ -204,45 +222,19 @@ public class main {
 	public static void separator() {
 		System.out.println("**********************************************************");
 	}
-	/**
-	 * Método que se encarga de rellenar la tabla con números aleatorios
-	 * @param has tabla de hash en la que queremos añadir los nElementos 
-	 * @param nElems número de elementos a añadir
-	 * @return lista con los números aleatorios añadidos
-	 */
-	public static int[] generateNumber(HashTable has,Integer nElems) {
-		int nDigits=10;
-		
-		int number;int key;
-		String fileName=new String();
-		
-		fileName=nElems.toString().concat("numbers.csv");
-		FileWriter escribir=null;
-		int [] array=new int[nElems];
-		
-			
-			for(int i =0;i<nElems;i++) {
-				number=randomInt();
-				//key=has.hashing(number);
-				array[i]=number;
-			}
-		return array;
-	}
+
 	/**
 	 * Método que se encarga de pedir un elemento y buscarlo en la lista pasada como parámetro
 	 * @param table tabla en la que buscaremos el elemento que se introduzca
 	 */
 	public static void searchElement(HashTable table) {
-		String data=new String();
+		String data= "";
 		do {
 		System.out.println("Escriu l'element que vulguis buscar: ");
 		scan=new Scanner(System.in);
-		try { 
+		try {
 		data=scan.next();
-		
-
 		//else
-
 			System.out.println(table.Buscar(data));
 		}catch(NumberFormatException e){
 			System.out.println("EL número introduit no és vàlid");
@@ -251,34 +243,22 @@ public class main {
 			System.out.println(e.getMessage());
 		}
 		}while(!data.equalsIgnoreCase("-1"));
-		
+
 	}
-	public static void writeFile(String fileName,int listLength,int accesos,int[]soFar) {
-		//FileWriter file=null;
-		//double secs=(double)accesos/1000000000.0;
-		try {
-			file.write(listLength+";"+accesos+";"+stDev(soFar)+"\n");
-			
-				file.flush();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+
 
 
 	/**
 	 * Genera un número entero aleatorio
 	 * @return random int
 	 */
-	public static int randomInt() {
+	public static int randomInt(int rightLimit) {
 		int leftLimit=1;
-		int rightLimit;
+		//int rightLimit;
 		int number;
-		for(int i=0;i<10-1;i++) {
-			leftLimit*=10;
-		}
-		rightLimit=(leftLimit*10)-1;
+
+		//rightLimit=Integer.MAX_VALUE;
+		//rightLimit=(leftLimit*10)-1;
 		number=leftLimit+(int)(Math.random()*(rightLimit-leftLimit));
 		return number;
 	}
