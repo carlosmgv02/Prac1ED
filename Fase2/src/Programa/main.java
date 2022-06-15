@@ -119,7 +119,7 @@ public class main {
 			nElems+=1000;i++;
 		}while(nElems<=50000);
 		numbers.writeFile();
-		scan=new Scanner(System.in);
+		/*scan=new Scanner(System.in);
 		System.out.println("Introduce el numero a buscar");
 		int n=scan.nextInt();
 		try{
@@ -127,7 +127,7 @@ public class main {
 
 		}catch(ElementoNoEncontrado e){
 
-		}
+		}*/
 		//Escritura del fitxer
 		FileWriter analisis=new FileWriter("Analisi/CostCompuTaula.csv");
 		analisis.write("MIDA;"+"N ACCESSOS;"+"DESV EST\n");

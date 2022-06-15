@@ -35,7 +35,7 @@ public class HashTable <K,T extends Comparable<T>>implements TADTaulaHash<K,T>{
 
 			for(int i=1;i<str.length();i++){
 
-				hash+=((int)str.charAt(i))*(32+i);
+				hash=(hash*32+(int)str.charAt(i))%tablaHash.length;
 			}
 			hash=hash < 0 ? hash * -1 : hash;
 		return hash;
@@ -72,17 +72,17 @@ public class HashTable <K,T extends Comparable<T>>implements TADTaulaHash<K,T>{
 			}
 		}
 		int hash=hash(key);
-		int index=getIndex(key);
-		if(tablaHash[index]==null){
-			tablaHash[index]=new Nodo<>(key,data,hash);
+		//int index=getIndex(key);
+		if(tablaHash[hash]==null){
+			tablaHash[hash]=new Nodo<>(key,data,hash);
 			nElems++;
 		}
 		else{
 			try{
 				int offset=Buscar(key);
-				replace(index,offset,data);
+				replace(hash,offset,data);
 			}catch (ElementoNoEncontrado e){
-				tablaHash[index].add(key,data,hash);
+				tablaHash[hash].add(key,data,hash);
 
 			}
 
@@ -98,9 +98,9 @@ public class HashTable <K,T extends Comparable<T>>implements TADTaulaHash<K,T>{
 	@Override
 	public int Buscar(K key) throws ElementoNoEncontrado{
 		int hash=hash(key);
-		int index=hash%tablaHash.length;
-		int c=0;
-		Nodo<K,T>temp=tablaHash[index];
+		//int index=hash%tablaHash.length;
+		int c=1;
+		Nodo<K,T>temp=tablaHash[hash];
 		if(temp!=null){
 			while(temp!=null){
 				if(temp.key.equals(key)){
@@ -126,8 +126,8 @@ public class HashTable <K,T extends Comparable<T>>implements TADTaulaHash<K,T>{
 	@Override
 	public void Esborrar(K key) throws ElementoNoEncontrado {
 		int hash=hash(key);
-		int index=getIndex(key);
-		Nodo<K, T> elem=tablaHash[index];
+		//int index=getIndex(key);
+		Nodo<K, T> elem=tablaHash[hash];
 		if(elem!=null){
 			try {
 				int offset = Buscar(key);
