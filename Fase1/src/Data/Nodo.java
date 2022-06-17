@@ -2,8 +2,8 @@ package Data;
 
 public class Nodo<T extends Comparable<T>> {
 	T data;
-	public Nodo siguiente;
-	public Nodo anterior;
+	public Nodo<T> siguiente;
+	public Nodo<T> anterior;
 	
 	/**
 	 * Constructor
@@ -11,7 +11,7 @@ public class Nodo<T extends Comparable<T>> {
 	 * @param ant
 	 * @param data
 	 */
-	public Nodo(Nodo sig,Nodo ant,T data) {
+	public Nodo(Nodo<T> sig,Nodo<T> ant,T data) {
 		siguiente=sig;
 		anterior=ant;
 		this.data=data;
@@ -37,14 +37,14 @@ public class Nodo<T extends Comparable<T>> {
 	 * Getter
 	 * @return next Node
 	 */
-	public Nodo getSiguiente() {
+	public Nodo<T> getSiguiente() {
 		return siguiente;
 	}
 	/**
 	 * Setter
 	 * @param sig next node to override
 	 */
-	public void setSiguiente(Nodo sig) {
+	public void setSiguiente(Nodo<T> sig) {
 		siguiente=sig;
 	}
 	/**
@@ -58,15 +58,15 @@ public class Nodo<T extends Comparable<T>> {
 	 * Setter
 	 * @param ant Node to override
 	 */
-	public void setAnterior(Nodo ant) {
+	public void setAnterior(Nodo<T> ant) {
 		anterior=ant;
 	}
 	/**
 	 * Mètodo que retorna una copia del Nodo actual
 	 * @return
 	 */
-	public Nodo copia() {
-		return new Nodo(siguiente,anterior,data);
+	public Nodo<T> copia() {
+		return new Nodo<T>(siguiente,anterior,data);
 	}
 	
 }

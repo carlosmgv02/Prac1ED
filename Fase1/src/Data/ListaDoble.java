@@ -3,31 +3,14 @@ import java.util.*;
 
 import Exceptions.*;
 public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Iterable<Ciutada>{
-	public Nodo inicio,fin;
+	protected Nodo<T> inicio,fin;
 	private int nElems;
 	private int posicioIterator;
 
 	public ListaDoble() {
 		inicio=fin=null;
 	}
-	/**
-	 * Creació de la llista doblement encadenada donada una mida
-	 * @param nElems
-	 */
-	public ListaDoble(int nElems) {
-		int i=0;
-		//inicio=new Nodo(null);
-		this.nElems++;
-		
-		Nodo<T>nodoAux=inicio;
-		while(i<nElems-1) {
-			nodoAux.siguiente=new Nodo<>(i);
-			nodoAux.siguiente.anterior=nodoAux;
-			nodoAux=nodoAux.siguiente;
-			this.nElems++;i++;
 
-		}
-	}
 	
 	/**
 	 * Inicialització del primer element de la llista encadenada
@@ -54,7 +37,7 @@ public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Itera
 
 		}
 		else {
-			inicio=fin=new Nodo(data);
+			inicio=fin=new Nodo<T>(data);
 		}
 		nElems++;
 	}
@@ -100,12 +83,12 @@ public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Itera
 	public T Obtenir(int posi)throws NoSePuede {
 		if(posi<nElems&&posi>=0) {
 			int i=0;
-			Nodo aux=inicio;
+			Nodo<T> aux=inicio;
 			while(i<posi) {
 				aux=aux.siguiente;
 				i++;
 			}
-			return (T)aux.data;
+			return aux.data;
 		}
 		else {
 			throw new NoSePuede(posi);
@@ -117,7 +100,7 @@ public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Itera
 	 * Mètode per a esborrar un node, utilitzat al mètode 'Esborrar(int posi)'
 	 * @param elem: node a eliminar de la llista
 	 */
-	public void eliminarNodo(Nodo elem) {
+	public void eliminarNodo(Nodo<T> elem) {
 		if(inicio==null||elem==null)
 			return;
 		if(inicio==elem)
@@ -137,7 +120,7 @@ public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Itera
 	 */
 	public void Esborrar(int posi) {
 		if(posi>=0 && posi<nElems) {
-			Nodo aux=inicio;
+			Nodo<T> aux=inicio;
 			int i;
 			for(i=1;aux!=null&&i<posi;i++) {
 				aux=aux.siguiente;
@@ -157,8 +140,8 @@ public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Itera
 	 */
 	public int Buscar(T dato)throws ElementoNoEncontrado {
 		int n=1,i=0;
-		Nodo aux=inicio;
-		String temp=new String();
+		Nodo<T> aux=inicio;
+		String temp;
 
 		while(i<nElems) {
 			if(aux.data.compareTo(dato)==0)
@@ -175,23 +158,21 @@ public class ListaDoble<T extends Comparable<T>> implements TADCiutada <T>,Itera
 	 * Mètode de l'iterator
 	 */
 	public Iterator<Ciutada>iterator(){
-		CiutadaIterator a=new CiutadaIterator(this);
-		return a;
+		return new CiutadaIterator<T>(this);
 	}
 	/**
 	 * Mètode per a duplicar llista actual
 	 * @return copia
 	 */
-	public ListaDoble copia() {
+	public ListaDoble<T> copia() {
 		return this;
 	}
 	/**
 	 * Mètode per a imprimir la llista, utilitzem el mètode iterator()
 	 */
 	public void recorrer() {
-		Iterator<Ciutada>i=this.iterator();
-		while(i.hasNext()) {
-			System.out.println(i.next());
+		for (Ciutada ciutada : this) {
+			System.out.println(ciutada);
 		}
 	}
 	/**

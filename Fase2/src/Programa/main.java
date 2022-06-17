@@ -7,8 +7,6 @@ import Data.*;
 import Exceptions.ElementoNoEncontrado;
 
 public class main {
-	public static FileWriter file;
-	public static Scanner scan;
 
 	public static void main(String[] args)throws InterruptedException, IOException  {
 		// PROGRAMA PRINCIPAL PART HASHINGS
@@ -93,7 +91,7 @@ public class main {
 			}
 
 			String fileName="Analisi/LogCerques/"+nElems+"searches.txt";
-			PrintStream output = null;
+			PrintStream output;
 			try {
 				output = new PrintStream(new FileOutputStream(fileName));
 			} catch (FileNotFoundException e) {
@@ -119,15 +117,7 @@ public class main {
 			nElems+=1000;i++;
 		}while(nElems<=50000);
 		numbers.writeFile();
-		/*scan=new Scanner(System.in);
-		System.out.println("Introduce el numero a buscar");
-		int n=scan.nextInt();
-		try{
-		System.out.println(numbers.Buscar(n));
 
-		}catch(ElementoNoEncontrado e){
-
-		}*/
 		//Escritura del fitxer
 		FileWriter analisis=new FileWriter("Analisi/CostCompuTaula.csv");
 		analisis.write("MIDA;"+"N ACCESSOS;"+"DESV EST\n");
@@ -141,10 +131,10 @@ public class main {
 
 	}
 	public static void JocProvesLlista(){
-		ListaDoble<Integer,Integer>lista=new ListaDoble<>();
+		ListaDoble<Integer,Integer>lista;
 		int nElems=1000;
 		int[]digits;
-		int searchElems=0;
+		int searchElems;
 		ArrayList<ArrayList<Integer>>llistaAux=new ArrayList<>();
 		int i=0;
 		FileWriter analisis=null;
@@ -152,6 +142,7 @@ public class main {
 			analisis = new FileWriter("Analisi/CostCompuLlista.csv");
 			analisis.write("MIDA;"+"N ACCESSOS;"+"DESV EST\n");
 		}catch(IOException e) {
+			System.out.println("FILE NOT FOUND");
 		}
 		do{
 			lista=new ListaDoble<>();
@@ -223,29 +214,6 @@ public class main {
 		System.out.println("**********************************************************");
 	}
 
-	/**
-	 * Método que se encarga de pedir un elemento y buscarlo en la lista pasada como parámetro
-	 * @param table tabla en la que buscaremos el elemento que se introduzca
-	 */
-	public static void searchElement(HashTable table) {
-		String data= "";
-		do {
-		System.out.println("Escriu l'element que vulguis buscar: ");
-		scan=new Scanner(System.in);
-		try {
-		data=scan.next();
-		//else
-			System.out.println(table.Buscar(data));
-		}catch(NumberFormatException e){
-			System.out.println("EL número introduit no és vàlid");
-		}
-		catch(ElementoNoEncontrado e){
-			System.out.println(e.getMessage());
-		}
-		}while(!data.equalsIgnoreCase("-1"));
-
-	}
-
 
 
 	/**
@@ -254,13 +222,7 @@ public class main {
 	 */
 	public static int randomInt(int rightLimit) {
 		int leftLimit=1;
-		//int rightLimit;
-		int number;
-
-		//rightLimit=Integer.MAX_VALUE;
-		//rightLimit=(leftLimit*10)-1;
-		number=leftLimit+(int)(Math.random()*(rightLimit-leftLimit));
-		return number;
+		return leftLimit+(int)(Math.random()*(rightLimit-leftLimit));
 	}
 	
 }
