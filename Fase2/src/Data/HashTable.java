@@ -221,7 +221,7 @@ public class HashTable<K, T extends Comparable<T>> implements TADTaulaHash<K, T>
      */
     public void replace(int index, int offset, T data) {
         Nodo<K, T> node = tablaHash[index];
-        int i = 0;
+        int i = 1;
         while (i != offset && node != null) {
             node = node.nextCol;
             i++;

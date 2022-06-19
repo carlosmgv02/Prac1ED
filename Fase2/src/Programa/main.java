@@ -109,6 +109,8 @@ public class main {
 					System.out.println(searchElems+" iteration until element has been found");
 
 				}catch(ElementoNoEncontrado e){
+					searchElems=e.getN();
+					llistaAux.get(i).add(searchElems);
 					System.out.println(e.getMessage());
 				}
 
@@ -158,6 +160,8 @@ public class main {
 					searchElems=lista.Buscar(randomInt(nElems/2));
 					llistaAux.get(i).add(searchElems);
 				}catch(ElementoNoEncontrado e){
+					searchElems=e.getN();
+					llistaAux.get(i).add(searchElems);
 					//System.out.println(e.getMessage());
 				}
 			}
