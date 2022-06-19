@@ -9,6 +9,10 @@ public class ElementoNoEncontrado extends Exception{
 		this.n = n;
 	}
 
+	/**
+	 * Exception getter
+	 * @return this.n
+	 */
 	public int getN() {
 		return n;
 	}
