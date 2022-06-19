@@ -11,7 +11,7 @@ public class main {
 	public static void main(String[] args)throws InterruptedException, IOException  {
 		// PROGRAMA PRINCIPAL PART HASHINGS
 
-		HashTable<Object,Ciutada>tablaAux=new HashTable<>();
+		HashTable<String,Ciutada>tablaAux=new HashTable<>();
 
 		Ciutada carlos=new Ciutada("Carlos","Martinez","49424598J");
 		Ciutada david=new Ciutada("David","Marti","7771391023");
@@ -49,22 +49,19 @@ public class main {
 
 
 
-		//ANÀLISI DEL COST COMPUTACIONAL
-
-		//Taula de hash
-		JocProvesTaula();
+		//Joc de proves de la taula de hash
+		mostrarMenu();
 		System.out.println("TABLE DONE");
-
 		//Anàlisi de la llista doblement encadenada
 		JocProvesLlista();
 		System.out.println("LIST DONE");
 	}
-	
-	
-	public static void JocProvesTaula() throws IOException {
+
+
+	public static void mostrarMenu() throws IOException {
 
 		int searchElems;
-		
+
 		System.out.println("BENVINGUT/UDA AL PROGRAMA PRINCIPAL");
 		System.out.println("A continuació s'executaran els següents mètodes de manera automàtica:");
 		System.out.println("-Després de finalitzar cada inerció dels elements a la taula de hash anirem buscant" +
@@ -74,8 +71,8 @@ public class main {
 				"els factors mencionats previament.");
 		System.out.println("COMENCEM...\n");
 		//t.sleep(3500);
-		
-		
+
+
 		int nElems=1000;
 		HashTable<Integer,Integer> numbers;
 		int[]digits;
@@ -101,17 +98,19 @@ public class main {
 				throw new RuntimeException(e);
 			}
 			System.setOut(output);
-				//Escribimos en un fichero los elementos que encuentra y los que no, para poder visualizarlo más comodamente
+			//Escribimos en un fichero los elementos que encuentra y los que no, para poder visualizarlo más comodamente
 
 			for(int j=0;j<nElems;j++) {
 
 				try{
-				searchElems=numbers.Buscar(randomInt(numbers.Mida()/2));
+					searchElems=numbers.Buscar(randomInt(numbers.Mida()/2));
 					llistaAux.get(i).add(searchElems);
-				//totalSearches[i]+=searchElems;
+					//totalSearches[i]+=searchElems;
 					System.out.println(searchElems+" iteration until element has been found");
 
 				}catch(ElementoNoEncontrado e){
+					searchElems=e.getN();
+					llistaAux.get(i).add(searchElems);
 					System.out.println(e.getMessage());
 				}
 
@@ -119,7 +118,7 @@ public class main {
 			System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
 			nElems+=1000;i++;
 		}while(nElems<=50000);
-
+		//numbers.writeFile();
 
 		//Escritura del fitxer
 		FileWriter analisis=new FileWriter("Analisi/CostCompuTaula.csv");
@@ -136,7 +135,7 @@ public class main {
 	public static void JocProvesLlista(){
 		ListaDoble<Integer,Integer>lista;
 		int nElems=1000;
-		ArrayList<Integer> digits;
+		int[]digits;
 		int searchElems;
 		ArrayList<ArrayList<Integer>>llistaAux=new ArrayList<>();
 		int i=0;
@@ -151,16 +150,18 @@ public class main {
 			lista=new ListaDoble<>();
 			System.out.println("nElems= "+nElems);
 			llistaAux.add(new ArrayList<>());
-			digits=new ArrayList<>();
+			digits=new int[nElems];
 			for(int j=0; j<nElems; j++){
-				digits.add( randomInt(nElems / 2));
-				lista.Inserir(digits.get(j));
+				digits[j]=randomInt(nElems/2);
+				lista.Inserir(digits[j]);
 			}
 			for(int k=0;k<nElems;k++){
 				try{
 					searchElems=lista.Buscar(randomInt(nElems/2));
 					llistaAux.get(i).add(searchElems);
 				}catch(ElementoNoEncontrado e){
+					searchElems=e.getN();
+					llistaAux.get(i).add(searchElems);
 					//System.out.println(e.getMessage());
 				}
 			}
@@ -178,12 +179,12 @@ public class main {
 			i++;
 			nElems+=1000;
 		}while(nElems<=50000);
-			try{
+		try{
 			analisis.close();
 
-			}catch(IOException e){
+		}catch(IOException e){
 
-			}
+		}
 
 
 	}
@@ -208,11 +209,11 @@ public class main {
 		for(int j=0;j<nums.length&&nums[j]!=0;j++) {
 			stDev+=Math.pow(nums[j]-media, 2);
 		}
-		 double sq = stDev / nums.length;
-	        stDev = Math.sqrt(sq);
+		double sq = stDev / nums.length;
+		stDev = Math.sqrt(sq);
 		return stDev;
 	}
-	
+
 	public static void separator() {
 		System.out.println("**********************************************************");
 	}
@@ -223,9 +224,9 @@ public class main {
 	 * Genera un número entero aleatorio
 	 * @return random int
 	 */
-	public static Integer randomInt(int rightLimit) {
+	public static int randomInt(int rightLimit) {
 		int leftLimit=1;
 		return leftLimit+(int)(Math.random()*(rightLimit-leftLimit));
 	}
-	
+
 }
